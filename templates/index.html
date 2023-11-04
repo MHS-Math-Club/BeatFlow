@@ -49,13 +49,24 @@
                 <div class="container text-center">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <!-- This is temporary templating this should be handled dynamically by js -->
+                            <!-- This is temporary templating this should be handled dynamically by js and the playlist variability-->
                             <img id="art" src="{{ playlist[0]['image'] }}" alt="Description of the image" class="img-fluid">
                             <ul class="list-unstyled mt-3">
                                 <li><strong>Song Name:</strong>{{ playlist[0]['name'] }}</li>
-                                <li><strong>Album:</strong>{{ playlist[0]['album'] }}</li>
-                                <li><strong>Artist:</strong>{{ playlist[0]['artists'][0] }}</li>
-                            </ul>
+                                <li>
+                                    <strong>{% if playlist[0]['artists']|length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
+                                    {% if playlist[0]['artists']|length > 1 %}
+                                        <ul>
+                                            {% for artist in playlist[0]['artists'] %}
+                                                <li>{{ artist }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% else %}
+                                        {{ playlist[0]['artists'][0] }}
+                                    {% endif %}
+                                </li>
+                            <li><strong>Energy:</strong>{{ (playlist[0]['energy'] * 100) | round|int }}</li>
+                                                        </ul>
                         </div>
                     </div>
                 </div>
