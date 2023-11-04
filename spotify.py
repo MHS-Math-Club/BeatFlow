@@ -7,10 +7,21 @@ secret = 'ae66f254352447059ad0ecf5ffa268e8'
 client_credentials_manager = SpotifyClientCredentials(client_id=cid, client_secret=secret)
 sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
-urn = 'spotify:artist:3jOstUTkEu2JkjvRdBA5Gu'
 
-artist = sp.artist(urn)
-print(artist)
+#gets list of tracks with name of track, artist names, id, album, image (as url)
+def getTracks(playlistId):
+    playlist = sp.playlist_tracks(playlistId, limit=100)
+    tracks = []
 
-user = sp.user('plamere')
-print(user)
+    id = playlist['items'][0]['track']['id']
+    track = sp.track(id)
+
+    for i in range(len(playlist['items'])):
+        id = playlist['items'][i]['track']['id']
+        track = sp.track(id)
+        names = []
+        for j in range(len(track['artists'])):
+            names.append(track['artists'][j]['name'])
+        Dict = {'name': track['name'], 'artists': names, 'id': id, 'album': track['album']['name'], 'image': track['album']['images'][0]['url']}
+        tracks.append(Dict)
+    return tracks
