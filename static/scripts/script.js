@@ -17,7 +17,7 @@ function getCadence() {
     DeviceMotionEvent.requestPermission().then(response => {
         if (response == 'granted') {
             let accelHist = []
-            let avgHist = []
+            let avgHist = [0, 0, 0]
             let direction = true
             let timeHist = []
             let longAccelHist = [1, 1]
@@ -48,27 +48,23 @@ function getCadence() {
                 avgHist.push(avgAccel)
                 
                 //detect peaks
-                if((avgHist[0] < avgHist[avgHist.length - 1] != direction) && (Math.abs(avgHist[0] - avgHist[avgHist.length - 1]) > 1)){
-                    direction =  !direction;
+                if((avgHist[0] < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length] < avgHist[Math.floor(avgHist.length / 2)]) ){
                     longAccelHist.push(netAccel)
                     warn('Peak detected')
-                }
-                
-                //finding cadence frequency
-                if (timeHist.length > 5){
-                    timeHist.shift();
-                }
-                timeHist.push(new Date().getTime());
-                let tdiffHist = [0]
-                for(i = 1; i < timeHist.length; i++){
-                    tdiffHist[i] = timeHist[i] - timeHist[i - 1];
-                }
+                    if (timeHist.length > 5){
+                        timeHist.shift();
+                    }
+                    timeHist.push(new Date().getTime());
+                    let tdiffHist = [0]
+                    for(i = 1; i < timeHist.length; i++){
+                        tdiffHist[i] = timeHist[i] - timeHist[i - 1];
+                    }
 
-                avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
+                    avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
 
-                cadence = 60000 / avgDiff;
-                headingElementCadence.textContent = "Cadence: " + cadence;
-
+                    cadence = 60000 / avgDiff;
+                    headingElementCadence.textContent = "Cadence: " + cadence;
+                }
                 //Calculate energy
                 if (longAccelHist.length > 10){
                     longAccelHist.shift();
