@@ -33,8 +33,8 @@ function getCadence(){
 
 function adjustTempo(tempo, cadence){
     let possibleTempos = [tempo / 4, tempo / 2, tempo, tempo * 2, tempo * 4]
-    possibleTempos.sort(function(a){return Math.abs(a - cadence)})
-    return possibleTempos[4]
+    possibleTempos.sort(function(a, b){return Math.abs(a - cadence) - Math.abs(b - cadence)})
+    return possibleTempos[0]
 }
 
 function adjustSpeed(tempo, cadence){
