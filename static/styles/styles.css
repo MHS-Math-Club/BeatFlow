@@ -1,0 +1,46 @@
+ /* Custom CSS to center the div */
+ .centered-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    max-width: 200px; 
+    height: auto;
+}
+
+.genre-dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    color: red;
+}
+
+.custom-dropdown {
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    width: 100px;
+}
+
+.center-image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#art {
+    padding: 10%;
+    padding-bottom: 0%;
+}
+
+#data {
+    padding-top: 5%;
+}
