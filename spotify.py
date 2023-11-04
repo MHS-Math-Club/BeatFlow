@@ -34,7 +34,11 @@ def get_tracks_with_info(playlist_id):
             'id': track_id,
             'album': track['album']['name'],
             'image': track['album']['images'][0]['url'],
-            'tempo':sp.audio_features([track_id])[0]['tempo']
+            'tempo':sp.audio_features([track_id])[0]['tempo'],
+            'time_signature': sp.audio_features([track_id])[0]['time_signature'],
+            'energy': sp.audio_features([track_id])[0]['energy'],
+            'happiness': sp.audio_features([track_id])[0]['valence'],
+            'loudness': sp.audio_features([track_id])[0]['loudness']
         }
         
         tracks_info.append(track_info)
