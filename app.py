@@ -2,7 +2,7 @@ import json
 import requests
 from flask import Flask, render_template, request, redirect, session, make_response, url_for
 from config import Config
-from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation
+from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack
 import time
 
 app = Flask(__name__)
@@ -13,8 +13,10 @@ app.secret_key = "something"
 @app.route("/", methods=["GET", "POST"])
 def index():
     if 'user_id' in session:
-        # What to do when logged in aka play music
-        pass
+        device_id = getUserDevices(session)[0][1]
+        playTrack(session, '3pv7Q5v2dpdefwdWIvE7yH', device_id)
+    else:
+        return redirect(url_for('auth'))
 
     playlist = []
     genre = "classical"
@@ -61,8 +63,5 @@ def callback():
     session['user_id'] = current_user['id']
 
     return redirect(url_for('index')) 
-
-if __name__ == '__main__':
-    app.run()
 
 

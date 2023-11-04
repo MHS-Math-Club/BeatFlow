@@ -89,28 +89,3 @@ function getCadence() {
         }
         });
     }
-
-function getNewSong(songList, idealTempo, idealEnergy, previousSongs){
-    let bestSong = songList[0];
-    let bestScore = 0;
-    for(i = 0; i < songList.length; i++){
-        let score = (Math.abs(adjustTempo(songList[i].tempo) - idealTempo)) + 0.3 * (Math.abs(songList[i].energy * 100 - idealEnergy));
-        if(previousSongs.includes(songList[i].id)){
-            score = 0;
-        }
-        if(score > bestScore){
-            bestSong = songList[i];
-            bestScore = score
-        }
-        
-    }
-    return bestSong.id;
-}
-
-function adjustTempo(tempo, cadence){
-    let possibleTempos = [tempo / 4, tempo / 2, tempo, tempo * 2, tempo * 4]
-    possibleTempos.sort(function(a){return Math.abs(a - cadence)})
-    return possibleTempos[4]
-    possibleTempos.sort(function(a, b){return Math.abs(a - cadence) - Math.abs(b - cadence)})
-    return possibleTempos[0]
-}

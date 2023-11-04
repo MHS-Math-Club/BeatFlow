@@ -34,9 +34,9 @@ Returns: either [access token, refresh token, expiration time] or None if reques
 def getToken(code, app):
 	token_url = 'https://accounts.spotify.com/api/token'
 	redirect_uri = app.config['REDIRECT_URI']
+	authorization = app.config['AUTHORIZATION']
 
-	base64encoded = base64.b64encode(("{}:{}".format(app.config['CLIENT_ID'], app.config['CLIENT_SECRET'])).encode())
-	headers = {"Authorization": "Basic {}".format(base64encoded.decode()), 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
+	headers = {"Authorization": "Basic {}".format(authorization), 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
 
 	body = {'code': code, 'redirect_uri': redirect_uri, 'grant_type': 'authorization_code'}
 	post_response = requests.post(token_url, headers=headers, data=body)
@@ -146,8 +146,10 @@ Returns: Parsed json response if request succeeds or None/status code if request
 """
 def makePostRequest(session, url, data):
 
-	headers = {"Authorization": "Bearer {}".format(session['token']), 'Accept': 'application/json', 'Content-Type': 'application/json'}
+	headers = {"Authorization": "Bearer {}".format(session['token']), 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
 	response = requests.post(url, headers=headers, data=data)
+
+	print(response.content)
 
 	# both 201 and 204 indicate success, however only 201 responses have body information
 	if response.status_code == 201:
@@ -201,3 +203,83 @@ def getUserInformation(session):
 		return None
 
 	return payload
+
+"""
+PLAYBACK: Functions that alter a user's playback or get information about playback.
+"""
+
+"""
+Gets all of a user's available devices.
+Returns: A list of devices, which are a list of [name, id]
+"""
+def getUserDevices(session):
+	url = 'https://api.spotify.com/v1/me/player/devices'
+	payload = makeGetRequest(session, url)
+
+	if payload == None:
+		return None
+
+	device_list = []
+	for device in payload['devices']:
+
+		# restricted devices cannot be accessed by the application
+		if device['is_restricted'] != True:
+			device_list.append([device['name'], device['id']])
+
+	return device_list
+
+
+"""
+Start a user's playback from the current context and parameter specified device.
+Returns: The response of the start request (for 403/404 error processing)
+"""
+def startPlayback(session, device):
+	url = 'https://api.spotify.com/v1/me/player/play'
+	params = {'device_id': device}
+	payload = makePutRequest(session, url, params)
+	return payload
+
+
+"""
+Start a user's playback from the parameter specified context and device.
+Returns: The response of the start request (for 403/404 error processing)
+"""
+def startPlaybackContext(session, playlist, device):
+	url = 'https://api.spotify.com/v1/me/player/play'
+	params = {'device_id': device}
+	data = "{\"context_uri\":\"" + playlist + "\",\"offset\":{\"position\":0},\"position_ms\":0}"
+	payload = makePutRequest(session, url, params, data)
+	return payload
+
+
+"""
+Pauses a user's playback.
+Returns: The response of the start request (for 403/404 error processing)
+"""
+def pausePlayback(session):
+	url = 'https://api.spotify.com/v1/me/player/pause'
+	payload = makePutRequest(session, url)
+	return payload
+
+
+"""
+Skips to the next track in a user's playback from the current context.
+Returns: The response of the start request (for 403/404 error processing)
+"""
+def skipTrack(session):
+    url = 'https://api.spotify.com/v1/me/player/next'
+    data = {}
+    payload = makePostRequest(session, url, data)
+    return payload
+
+def addToQueue(session, track_id):
+	url = f'https://api.spotify.com/v1/me/player/queue?uri=spotify:track:{track_id}'
+	data = {}
+	payload = makePostRequest(session, url, data)
+	return payload
+
+def playTrack(session, track_id, device):
+	pausePlayback(session)
+	addToQueue(session, track_id)
+	skipTrack(session)
+	startPlayback(session, device)
