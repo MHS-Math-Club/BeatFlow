@@ -30,19 +30,8 @@ function getCadence() {
                 var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
                 let parsed = parseFloat(netAccel.toFixed(1));
                 headingElement.textContent = "Acceleration: " + parsed;
-
-                let parsed30 = parseFloat(((parsed * 10 + 30)).toFixed(1));
-                let parsed60 = parseFloat(((parsed + 60)).toFixed(1));
-                let parsed90 = parseFloat(((parsed + 80)).toFixed(1));
-
-                if (netAccel < 2) {
-                    headingElementEnergy.textContent = "Energy: " + parsed30;
-                } else if (netAccel > 2 && netAccel < 10) {
-                    headingElementEnergy.textContent = "Energy: " + parsed60;
-                } else {
-                    headingElementEnergy.textContent = "Energy: " + parsed90;
-                }
-
+                
+                //acceleration smoothing
                 if (accelHist.length() > 100) {
                     accelHist.shift();
                 }
@@ -57,10 +46,14 @@ function getCadence() {
                     avgHist.shift();
                 }
                 avgHist.push(avgAccel)
+                
+                //detect peaks
                 if((avgHist[0] < avgHist[avgHist.length - 1] != direction) && (Math.abs(avgHist[0] - avgHist[avgHist.length - 1]) > 1)){
                     direction =  !direction;
+                    longAccelHist.push(netAccel)
                 }
-
+                
+                //finding cadence frequency
                 if (timeHist.length() > 30){
                     timeHist.shift();
                 }
@@ -75,6 +68,12 @@ function getCadence() {
                 cadence = 60000 / avgDiff;
                 headingElementCadence.textContent = "Cadence: " + cadence;
 
+                //Calculate energy
+                if (longAccelHist.length > 30){
+                    longAccelHist.shift();
+                }
+                var energy = cadence * 0.05 * longAccelHist.reduce(adder) / accelHist;
+                headingElementEnergy.textContent = "Energy: " + energy;
 
                 // Set another timeout for the next event processing after 100 milliseconds
             }
