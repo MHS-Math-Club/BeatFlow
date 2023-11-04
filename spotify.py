@@ -41,7 +41,7 @@ def get_tracks_with_info(playlist_id):
     
     return tracks_info
 
-data = get_tracks_with_info("27Zm1P410dPfedsdoO9fqm")
+data = sorted(get_tracks_with_info("27Zm1P410dPfedsdoO9fqm"), key=lambda x: x['tempo'])
 
 # Convert the list of dictionaries to a JSON string
 json_string = json.dumps(data, indent=4)
