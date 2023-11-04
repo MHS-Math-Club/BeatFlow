@@ -1,0 +1,152 @@
+[
+    {
+        "name": "Kernkraft 400",
+        "artists": [
+            "Zombie Nation"
+        ],
+        "id": "6PUzxtIHkv346yP89NzP9X",
+        "album": "Kernkraft 400 Single Mixes",
+        "image": "https://i.scdn.co/image/ab67616d0000b273916e34ccc44c2b56cdd0d7e4",
+        "tempo": 140.064,
+        "time_signature": 4,
+        "energy": 0.43,
+        "happiness": 0.487,
+        "loudness": -7.839
+    },
+    {
+        "name": "Heads Will Roll - A-Trak Remix",
+        "artists": [
+            "Yeah Yeah Yeahs",
+            "A-Trak"
+        ],
+        "id": "2idmlkd8oUaQvYEtINpLBX",
+        "album": "Heads Will Roll",
+        "image": "https://i.scdn.co/image/ab67616d0000b273f20af84f025b9870f1877603",
+        "tempo": 131.994,
+        "time_signature": 4,
+        "energy": 0.614,
+        "happiness": 0.774,
+        "loudness": -3.908
+    },
+    {
+        "name": "Creep - BYOR Remix",
+        "artists": [
+            "Naeleck",
+            "Haley Reinhart",
+            "BYOR"
+        ],
+        "id": "41TkFhNYljV7omolLJ6Squ",
+        "album": "Creep (BYOR Remix)",
+        "image": "https://i.scdn.co/image/ab67616d0000b2738f33b654d17d67f2fa8800ca",
+        "tempo": 126.979,
+        "time_signature": 4,
+        "energy": 0.775,
+        "happiness": 0.435,
+        "loudness": -6.539
+    },
+    {
+        "name": "Rain on Me",
+        "artists": [
+            "FIXL",
+            "Ruxolf",
+            "Koa"
+        ],
+        "id": "1ymVJxxBnFgNM9ocMzVqSg",
+        "album": "Rain on Me",
+        "image": "https://i.scdn.co/image/ab67616d0000b273a1c558f8aba3b6e1b31cae7e",
+        "tempo": 123.102,
+        "time_signature": 4,
+        "energy": 0.778,
+        "happiness": 0.494,
+        "loudness": -6.102
+    },
+    {
+        "name": "Wake Me Up",
+        "artists": [
+            "Avicii"
+        ],
+        "id": "4h8VwCb1MTGoLKueQ1WgbD",
+        "album": "True",
+        "image": "https://i.scdn.co/image/ab67616d0000b2734cfcceb6f9b1aae8752810e7",
+        "tempo": 124.08,
+        "time_signature": 4,
+        "energy": 0.783,
+        "happiness": 0.643,
+        "loudness": -5.697
+    },
+    {
+        "name": "Promises - Skrillex & Nero Remix",
+        "artists": [
+            "NERO"
+        ],
+        "id": "7569Hbv0FUS7vjkdGvdgeZ",
+        "album": "Welcome Reality +",
+        "image": "https://i.scdn.co/image/ab67616d0000b2734a00dec9ce1677ff4fbfeb91",
+        "tempo": 140.02,
+        "time_signature": 4,
+        "energy": 0.819,
+        "happiness": 0.143,
+        "loudness": -3.374
+    },
+    {
+        "name": "Tsunami - Original Mix",
+        "artists": [
+            "DVBBS",
+            "Borgeous"
+        ],
+        "id": "3felG0BIvmmOoCIeE2A5vq",
+        "album": "Tsunami (Original Mix)",
+        "image": "https://i.scdn.co/image/ab67616d0000b27392ba78b717aafb60b550eec8",
+        "tempo": 128.004,
+        "time_signature": 4,
+        "energy": 0.838,
+        "happiness": 0.289,
+        "loudness": -5.371
+    },
+    {
+        "name": "All Around The World (La La La)",
+        "artists": [
+            "R3HAB",
+            "A Touch Of Class"
+        ],
+        "id": "1D2Aldrksl9yWWCIPOeDzy",
+        "album": "All Around The World (La La La)",
+        "image": "https://i.scdn.co/image/ab67616d0000b273a00223ed12cbe970848b3107",
+        "tempo": 124.948,
+        "time_signature": 4,
+        "energy": 0.859,
+        "happiness": 0.52,
+        "loudness": -5.03
+    },
+    {
+        "name": "I Feel The Magic",
+        "artists": [
+            "Lucky Luke",
+            "Naeleck",
+            "ZHIKO"
+        ],
+        "id": "0ic0iGmElvGLyYcITm3Yod",
+        "album": "I Feel The Magic",
+        "image": "https://i.scdn.co/image/ab67616d0000b2738ede2fcd82a11764905ee5de",
+        "tempo": 140.034,
+        "time_signature": 4,
+        "energy": 0.941,
+        "happiness": 0.537,
+        "loudness": -5.475
+    },
+    {
+        "name": "Get Up (Rattle) [feat. Far East Movement] - Vocal Edit",
+        "artists": [
+            "Bingo Players",
+            "Far East Movement"
+        ],
+        "id": "3wLPRjw2XQpmowqXUXb3UF",
+        "album": "Get Up (Rattle) [feat. Far East Movement]",
+        "image": "https://i.scdn.co/image/ab67616d0000b27356aa362afd37024d8ba7d98f",
+        "tempo": 127.99,
+        "time_signature": 4,
+        "energy": 0.985,
+        "happiness": 0.72,
+        "loudness": -2.69
+    }
+]
