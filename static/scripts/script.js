@@ -43,7 +43,7 @@ function getCadence(){
                     direction =  !direction
                 }
 
-                if (timeHist.length() > 30){
+                if (timeHist.length() > 5){
                     timeHist.shift()
                 }
                 timeHist.push(new Date().getTime())
