@@ -16,7 +16,7 @@ def index():
         device_id = getUserDevices(session)[0][1]
         playTrack(session, '3pv7Q5v2dpdefwdWIvE7yH', device_id)
     else:
-        redirect(url_for('auth'))
+        return redirect(url_for('auth'))
 
     playlist = []
     genre = "classical"
