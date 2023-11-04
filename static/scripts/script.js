@@ -20,7 +20,7 @@ function getCadence() {
             let avgHist = []
             let direction = true
             let timeHist = []
-            let longAccelHist = []
+            let longAccelHist = [1, 1]
             console.log("accelerometer permission granted");
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
@@ -30,9 +30,9 @@ function getCadence() {
                 var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
                 let parsed = parseFloat(netAccel.toFixed(1));
                 headingElement.textContent = "Acceleration: " + parsed;
-                
+
                 //acceleration smoothing
-                if (accelHist.length() > 100) {
+                if (accelHist.length > 1000) {
                     accelHist.shift();
                 }
                 accelHist.push(netAccel);
@@ -42,7 +42,7 @@ function getCadence() {
                     return total + value;
                 }
 
-                if (avgHist.length() > 100) {
+                if (avgHist.length > 1000) {
                     avgHist.shift();
                 }
                 avgHist.push(avgAccel)
@@ -51,10 +51,11 @@ function getCadence() {
                 if((avgHist[0] < avgHist[avgHist.length - 1] != direction) && (Math.abs(avgHist[0] - avgHist[avgHist.length - 1]) > 1)){
                     direction =  !direction;
                     longAccelHist.push(netAccel)
+                    warn('Peak detected')
                 }
                 
                 //finding cadence frequency
-                if (timeHist.length() > 30){
+                if (timeHist.length > 5){
                     timeHist.shift();
                 }
                 timeHist.push(new Date().getTime());
@@ -63,13 +64,13 @@ function getCadence() {
                     tdiffHist[i] = timeHist[i] - timeHist[i - 1];
                 }
 
-                avgDiff = tdiffHist.reduce(adder) / tdiffHist.length();
+                avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
 
                 cadence = 60000 / avgDiff;
                 headingElementCadence.textContent = "Cadence: " + cadence;
 
                 //Calculate energy
-                if (longAccelHist.length > 30){
+                if (longAccelHist.length > 10){
                     longAccelHist.shift();
                 }
                 var energy = cadence * 0.05 * longAccelHist.reduce(adder) / accelHist;
