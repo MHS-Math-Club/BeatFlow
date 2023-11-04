@@ -1,0 +1,161 @@
+[
+    {
+        "name": "Gangsta's Paradise",
+        "artists": [
+            "Coolio",
+            "L.V."
+        ],
+        "id": "1DIXPcTDzTj8ZMHt3PDt8p",
+        "album": "Gangsta's Paradise",
+        "image": "https://i.scdn.co/image/ab67616d0000b273c31d3c870a3dbaf7b53186cc",
+        "tempo": 79.975,
+        "time_signature": 4,
+        "energy": 0.514,
+        "happiness": 0.386,
+        "loudness": -10.05
+    },
+    {
+        "name": "Can I Kick It?",
+        "artists": [
+            "A Tribe Called Quest"
+        ],
+        "id": "4JCCOEaM5QIM8kDZ5kaVll",
+        "album": "Hip Hop 100 Hits - Urban rap & R n B anthems inc. Jay Z, A$ap Rocky, Wu-Tang Clan & Nas",
+        "image": "https://i.scdn.co/image/ab67616d0000b273ac00421556783c6bc3b8f704",
+        "tempo": 96.684,
+        "time_signature": 4,
+        "energy": 0.557,
+        "happiness": 0.717,
+        "loudness": -12.873
+    },
+    {
+        "name": "C.R.E.A.M. (Cash Rules Everything Around Me) - Radio Edit",
+        "artists": [
+            "Wu-Tang Clan"
+        ],
+        "id": "3kHmh2mxp4g5o1CkRw1gI6",
+        "album": "Hip Hop 100 Hits - Urban rap & R n B anthems inc. Jay Z, A$ap Rocky, Wu-Tang Clan & Nas",
+        "image": "https://i.scdn.co/image/ab67616d0000b273ac00421556783c6bc3b8f704",
+        "tempo": 180.873,
+        "time_signature": 4,
+        "energy": 0.647,
+        "happiness": 0.622,
+        "loudness": -7.105
+    },
+    {
+        "name": "Can I Kick It?",
+        "artists": [
+            "A Tribe Called Quest"
+        ],
+        "id": "3Ti0GdlrotgwsAVBBugv0I",
+        "album": "People's Instinctive Travels and the Paths of Rhythm (25th Anniversary Edition)",
+        "image": "https://i.scdn.co/image/ab67616d0000b2734ba1fe238a517021ebcc2ace",
+        "tempo": 96.662,
+        "time_signature": 4,
+        "energy": 0.666,
+        "happiness": 0.744,
+        "loudness": -6.547
+    },
+    {
+        "name": "Gold Digger",
+        "artists": [
+            "Kanye West",
+            "Jamie Foxx"
+        ],
+        "id": "43PBE5b3RJgwfi1i9xKtEs",
+        "album": "Late Registration",
+        "image": "https://i.scdn.co/image/ab67616d0000b273cdcd1e0c30e10686af48baad",
+        "tempo": 92.472,
+        "time_signature": 4,
+        "energy": 0.672,
+        "happiness": 0.625,
+        "loudness": -6.069
+    },
+    {
+        "name": "I Got 5 On It",
+        "artists": [
+            "Luniz",
+            "Michael Marshall"
+        ],
+        "id": "4IYKjN1DrYzxKXt0umJqsG",
+        "album": "Operation Stackola",
+        "image": "https://i.scdn.co/image/ab67616d0000b273c1ea4aac1ad07a38c59dd30c",
+        "tempo": 173.926,
+        "time_signature": 4,
+        "energy": 0.706,
+        "happiness": 0.58,
+        "loudness": -7.899
+    },
+    {
+        "name": "Take What You Want (feat. Ozzy Osbourne & Travis Scott)",
+        "artists": [
+            "Post Malone",
+            "Ozzy Osbourne",
+            "Travis Scott"
+        ],
+        "id": "7CZyCXKG6d5ALeq41sLzbw",
+        "album": "Hollywood's Bleeding",
+        "image": "https://i.scdn.co/image/ab67616d0000b2739478c87599550dd73bfa7e02",
+        "tempo": 139.919,
+        "time_signature": 4,
+        "energy": 0.8,
+        "happiness": 0.272,
+        "loudness": -2.665
+    },
+    {
+        "name": "Gettin' Jiggy Wit It",
+        "artists": [
+            "Will Smith"
+        ],
+        "id": "2JZiP4KStLCAvd2HEWOPfI",
+        "album": "Hip Hop 100 Hits - Urban rap & R n B anthems inc. Jay Z, A$ap Rocky, Wu-Tang Clan & Nas",
+        "image": "https://i.scdn.co/image/ab67616d0000b273ac00421556783c6bc3b8f704",
+        "tempo": 107.889,
+        "time_signature": 4,
+        "energy": 0.821,
+        "happiness": 0.858,
+        "loudness": -6.966
+    },
+    {
+        "name": "We Made You",
+        "artists": [
+            "Eminem"
+        ],
+        "id": "4UMTp91LHhvW33ol9ZQH0Q",
+        "album": "Relapse: Refill",
+        "image": "https://i.scdn.co/image/ab67616d0000b273506c4cc93e5a6234164125e1",
+        "tempo": 114.003,
+        "time_signature": 4,
+        "energy": 0.853,
+        "happiness": 0.67,
+        "loudness": -1.203
+    },
+    {
+        "name": "Intergalactic - Remastered 2009",
+        "artists": [
+            "Beastie Boys"
+        ],
+        "id": "5fpizYGbi5IQoEraj6FP0R",
+        "album": "Hello Nasty (Deluxe Edition/Remastered)",
+        "image": "https://i.scdn.co/image/ab67616d0000b273ab1d7b56d97842315dd0fdaa",
+        "tempo": 105.932,
+        "time_signature": 4,
+        "energy": 0.864,
+        "happiness": 0.47,
+        "loudness": -6.119
+    },
+    {
+        "name": "It Takes Two",
+        "artists": [
+            "Rob Base & DJ EZ Rock"
+        ],
+        "id": "6yMcdWpeGd0P4oXzUZwBec",
+        "album": "Hip Hop 100 Hits - Urban rap & R n B anthems inc. Jay Z, A$ap Rocky, Wu-Tang Clan & Nas",
+        "image": "https://i.scdn.co/image/ab67616d0000b273ac00421556783c6bc3b8f704",
+        "tempo": 111.662,
+        "time_signature": 4,
+        "energy": 0.903,
+        "happiness": 0.583,
+        "loudness": -4.433
+    }
+]

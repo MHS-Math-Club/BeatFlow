@@ -16,6 +16,4 @@ def index():
     with open(file_path, 'r') as json_file:
         playlist = json.load(json_file)
 
-    print(playlist)
-
     return render_template("index.html", playlist=playlist, genre=genre)

@@ -33,8 +33,9 @@
                             <span class="genre-dropdown" id="genreDropdown">{{ genre }}</span>
                             <select class="form-control custom-dropdown" id="genreSelect" name="genre">
                                 <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
-                                <option value="rap" {% if genre == "rap" %}selected{% endif %}>rap</option>
+                                <option value="hiphop" {% if genre == "hiphop" %}selected{% endif %}>hiphop</option>
                                 <option value="pop" {% if genre == "pop" %}selected{% endif %}>pop</option>
+                                <option value="edm" {% if genre == "edm" %}selected{% endif %}>edm</option>
                             </select>
                         </h3>
                         <button class="btn btn-primary" type="submit">Start</button>
@@ -48,13 +49,20 @@
                 <div class="container text-center">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <!-- This is temporary templating this should be handled dynamically by js -->
-                            <img id="art" src="{{ playlist[0]['image'] }}" alt="Description of the image" class="img-fluid">
+                            <!-- This is temporary templating this should be handled dynamically by js and the playlist variability-->
+                            <img id="art" src="{{ playlist[9]['image'] }}" alt="Description of the image" class="img-fluid">
                             <ul class="list-unstyled mt-3">
-                                <li><strong>Song Name:</strong>{{ playlist[0]['name'] }}</li>
-                                <li><strong>Album:</strong>{{ playlist[0]['album'] }}</li>
-                                <li><strong>Artist:</strong>{{ playlist[0]['artists'][0] }}</li>
-                            </ul>
+                                <li><strong>Song Name:</strong>{{ playlist[9]['name'] }}</li>
+                                <li>
+                                    <strong>{% if playlist[9]['artists']|length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
+                                    {% if playlist[9]['artists']|length > 1 %}
+                                        {{ playlist[9]['artists']|join(', ') }}
+                                    {% else %}
+                                        {{ playlist[9]['artists'][0] }}
+                                    {% endif %}
+                                </li>
+                            <li><strong>Energy:</strong>{{ (playlist[9]['energy'] * 100) | round|int }}</li>
+                                                        </ul>
                         </div>
                     </div>
                 </div>
