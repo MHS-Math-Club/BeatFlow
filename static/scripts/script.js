@@ -20,6 +20,7 @@ function getCadence() {
             let avgHist = []
             let direction = true
             let timeHist = []
+            let longAccelHist = []
             console.log("accelerometer permission granted");
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
@@ -42,7 +43,7 @@ function getCadence() {
                     headingElementEnergy.textContent = "Energy: " + parsed90;
                 }
 
-                if (accelHist.length() > 30) {
+                if (accelHist.length() > 100) {
                     accelHist.shift();
                 }
                 accelHist.push(netAccel);
@@ -52,11 +53,11 @@ function getCadence() {
                     return total + value;
                 }
 
-                if (avgHist.length() > 30) {
+                if (avgHist.length() > 100) {
                     avgHist.shift();
                 }
                 avgHist.push(avgAccel)
-                if(avgHist[0] < avgHist[avgHist.length - 1] != direction){
+                if((avgHist[0] < avgHist[avgHist.length - 1] != direction) && (Math.abs(avgHist[0] - avgHist[avgHist.length - 1]) > 1)){
                     direction =  !direction;
                 }
 
