@@ -21,6 +21,7 @@ function getCadence() {
             let direction = true
             let timeHist = []
             let longAccelHist = [1, 1]
+            let cadence = 0
             console.log("accelerometer permission granted");
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
