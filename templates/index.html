@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/static/styles/styles.css">
     <script src="/static/scripts/scripts.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  
-    {% set image = id ~ '.jpg' %}
+    <script>
+        var playlist = {{ playlist|tojson|safe }};
+    </script>
 </head>
 
 <body>
@@ -25,16 +27,18 @@
             <div id="data" class="col-md-12 centered-div">
                 <div>
                     <div class="container">
+                    <form action="/" method="POST">
                         <h3>
-                            I want the genre <span class="genre-dropdown" id="genreDropdown">rap</span>
-                            <select class="form-control custom-dropdown d-none" id="genreSelect">
-                                <option value="rap">rap</option>
-                                <option value="classical">classical</option>
-                                <option value="pop">pop</option>
+                            I want the genre
+                            <span class="genre-dropdown" id="genreDropdown">{{ genre }}</span>
+                            <select class="form-control custom-dropdown" id="genreSelect" name="genre">
+                                <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
+                                <option value="rap" {% if genre == "rap" %}selected{% endif %}>rap</option>
+                                <option value="pop" {% if genre == "pop" %}selected{% endif %}>pop</option>
                             </select>
                         </h3>
-                    </div>
-                    <button class="btn btn-primary">Start</button>
+                        <button class="btn btn-primary" type="submit">Start</button>
+                    </form>
                     <h3 id="accel_value">0</h3>
                 </div>
             </div>
@@ -44,11 +48,12 @@
                 <div class="container text-center">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <img id="art" src="/static/images/{{ image }}" alt="Description of the image" class="img-fluid">
+                            <!-- This is temporary templating this should be handled dynamically by js -->
+                            <img id="art" src="{{ playlist[0]['image'] }}" alt="Description of the image" class="img-fluid">
                             <ul class="list-unstyled mt-3">
-                                <li><strong>Song Name:</strong>{{ song_name }}</li>
-                                <li><strong>Album:</strong>{{ album_name }}</li>
-                                <li><strong>Artist:</strong>{{ artist_name }}</li>
+                                <li><strong>Song Name:</strong>{{ playlist[0]['name'] }}</li>
+                                <li><strong>Album:</strong>{{ playlist[0]['album'] }}</li>
+                                <li><strong>Artist:</strong>{{ playlist[0]['artists'][0] }}</li>
                             </ul>
                         </div>
                     </div>
