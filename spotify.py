@@ -1,4 +1,4 @@
-import requests
+import json
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 
@@ -40,3 +40,14 @@ def get_tracks_with_info(playlist_id):
         tracks_info.append(track_info)
     
     return tracks_info
+
+data = get_tracks_with_info("27Zm1P410dPfedsdoO9fqm")
+
+# Convert the list of dictionaries to a JSON string
+json_string = json.dumps(data, indent=4)
+
+# Write the JSON string to a file
+with open("data.json", "w") as json_file:
+    json_file.write(json_string)
+
+print("Data has been written to data.json")
