@@ -8,7 +8,8 @@ app.secret_key = "something"
 @app.route("/", methods=["GET", "POST"])
 def index():
     if 'auth_header' in session:
-        print("YAYYAYA")
+        #
+
     playlist = []
     genre = "classical"
 
