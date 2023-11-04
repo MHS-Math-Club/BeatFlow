@@ -23,6 +23,7 @@ function getCadence() {
             console.log("accelerometer permission granted");
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
+            var headingElementCadence = document.getElementById("cadence_value")
 
             function processMotionEvent(event) {
                 var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
@@ -42,35 +43,37 @@ function getCadence() {
                 }
 
                 if (accelHist.length() > 30) {
-                    accelHist.shift()
+                    accelHist.shift();
                 }
-                accelHist.push(netAccel)
-                let avgAccel = accelHist.reduce(adder) / accelHist.length
+                accelHist.push(netAccel);
+                let avgAccel = accelHist.reduce(adder) / accelHist.length;
 
                 function adder(total, value, index, array){
-                    return total + value
+                    return total + value;
                 }
 
                 if (avgHist.length() > 30) {
-                    avgHist.shift()
+                    avgHist.shift();
                 }
                 avgHist.push(avgAccel)
                 if(avgHist[0] < avgHist[avgHist.length - 1] != direction){
-                    direction =  !direction
+                    direction =  !direction;
                 }
 
                 if (timeHist.length() > 30){
-                    timeHist.shift()
+                    timeHist.shift();
                 }
-                timeHist.push(new Date().getTime())
+                timeHist.push(new Date().getTime());
                 let tdiffHist = [0]
                 for(i = 1; i < timeHist.length; i++){
-                    tdiffHist[i] = timeHist[i] - timeHist[i - 1]
+                    tdiffHist[i] = timeHist[i] - timeHist[i - 1];
                 }
 
-                avgDiff = tdiffHist.reduce(adder) / tdiffHist.length()
+                avgDiff = tdiffHist.reduce(adder) / tdiffHist.length();
 
-                cadence = 60000 / avgDiff
+                cadence = 60000 / avgDiff;
+                headingElementCadence.textContent = "Cadence: " + cadence;
+
 
                 // Set another timeout for the next event processing after 100 milliseconds
             }
