@@ -10,14 +10,14 @@ sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
 
 def get_tracks_with_info(playlist_id):
     """
-    Retrieve a list of tracks from a playlist with their name, artist names, ID, album, and image URL.
+    Retrieve a list of tracks from a playlist with their name, artist names, ID, album, image URL, and tempo.
 
     Args:
         playlist_id (str): The unique identifier of the playlist.
 
     Returns:
         list: A list of dictionaries containing track information, including name, artist names,
-              ID, album, and image URL.
+              ID, album, image URL, and tempo.
     """
     playlist_data = sp.playlist_tracks(playlist_id, limit=100)
     tracks_info = []
@@ -33,10 +33,10 @@ def get_tracks_with_info(playlist_id):
             'artists': artist_names,
             'id': track_id,
             'album': track['album']['name'],
-            'image': track['album']['images'][0]['url']
+            'image': track['album']['images'][0]['url'],
+            'tempo':sp.audio_features([track_id])[0]['tempo']
         }
         
         tracks_info.append(track_info)
     
     return tracks_info
-
