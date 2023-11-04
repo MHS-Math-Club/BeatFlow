@@ -33,8 +33,9 @@
                             <span class="genre-dropdown" id="genreDropdown">{{ genre }}</span>
                             <select class="form-control custom-dropdown" id="genreSelect" name="genre">
                                 <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
-                                <option value="rap" {% if genre == "rap" %}selected{% endif %}>rap</option>
+                                <option value="hiphop" {% if genre == "hiphop" %}selected{% endif %}>hiphop</option>
                                 <option value="pop" {% if genre == "pop" %}selected{% endif %}>pop</option>
+                                <option value="edm" {% if genre == "edm" %}selected{% endif %}>edm</option>
                             </select>
                         </h3>
                         <button class="btn btn-primary" type="submit">Start</button>
