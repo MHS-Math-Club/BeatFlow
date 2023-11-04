@@ -52,24 +52,22 @@
                 <div class="container text-center">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <!-- This is temporary templating this should be handled dynamically by js and the playlist variability-->
-                            <img id="art" src="{{ playlist[9]['image'] }}" alt="Description of the image" class="img-fluid">
+                            <img id="art" src="{{ img }}" alt="song cover" class="img-fluid">
                             <ul class="list-unstyled mt-3">
-                                <li><strong>Song Name:</strong>{{ playlist[9]['name'] }}</li>
+                                <li><strong>Song Name:</strong> {{ name }}</li>
                                 <li>
-                                    <strong>{% if playlist[9]['artists']|length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
-                                    {% if playlist[9]['artists']|length > 1 %}
-                                        {{ playlist[9]['artists']|join(', ') }}
+                                    <strong>{% if playlist[0]|length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
+                                    {% if playlist[0]|length > 1 %}
+                                        {{ playlist[0]|join(', ') }}
                                     {% else %}
-                                        {{ playlist[9]['artists'][0] }}
+                                        {{ playlist[0] }}
                                     {% endif %}
                                 </li>
-                            <li><strong>Energy:</strong>{{ (playlist[9]['energy'] * 100) | round|int }}</li>
-                                                        </ul>
+                                <li><strong>Energy:</strong> {{ (100) | round|int }}</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </div>

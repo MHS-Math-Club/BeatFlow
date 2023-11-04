@@ -283,3 +283,16 @@ def playTrack(session, track_id, device):
 	addToQueue(session, track_id)
 	skipTrack(session)
 	startPlayback(session, device)
+
+def getTrack(session, track_id):
+    url = f'https://api.spotify.com/v1/tracks/{track_id}'
+    payload = makeGetRequest(session, url)
+
+    if payload is None:
+        return None
+
+    name = payload['name']
+    img = payload['album']['images'][0]['url']
+
+    return {'name': name, 'img': img}
+
