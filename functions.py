@@ -284,6 +284,12 @@ def playTrack(session, track_id, device):
 	skipTrack(session)
 	startPlayback(session, device)
 
+def getAudioFeatures(session, track_id):
+	url = f"https://api.spotify.com/v1/audio-features/{track_id}"
+	data = {}
+	payload = makeGetRequest(session, url)
+	return payload
+
 def getTrack(session, track_id):
     url = f'https://api.spotify.com/v1/tracks/{track_id}'
     payload = makeGetRequest(session, url)
@@ -291,8 +297,23 @@ def getTrack(session, track_id):
     if payload is None:
         return None
 
-    name = payload['name']
-    img = payload['album']['images'][0]['url']
+        audio_features = getAudioFeatures(session, track_id)
 
-    return {'name': name, 'img': img}
+        artist_names = [artist['name'] for artist in track['artists']]
+
+        track_info = {
+            'name': track['name'],
+            'artists': artist_names,
+            'id': track_id,
+            'album': track['album']['name'],
+            'image': track['album']['images'][0]['url'],
+            'tempo': audio_features['tempo'],
+            'time_signature': audio_features['time_signature'],
+            'energy': audio_features['energy'],
+            'happiness': audio_features['valence'],
+            'loudness': audio_features['loudness'],
+            'danceability': audio_features['danceability']
+        }   
+
+    return track_info
 

@@ -26,8 +26,13 @@ def index():
 
         with open(file_path, 'r') as txt_file:
             playlist = txt_file.read().splitlines()
+
+        playlist_data = []
+        for track_id in playlist:
+            playlist_data.append(getTrack(session, track_id))
+
             
-        return render_template("index.html", playlist=playlist, img=info["img"], name=info["name"], genre=genre)
+        return render_template("index.html", playlist=playlist_data, img=info["img"], name=info["name"], genre=genre)
     else:
         return redirect(url_for('auth'))
 
