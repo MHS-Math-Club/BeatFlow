@@ -14,6 +14,7 @@ app.secret_key = "something"
 def index():
     if 'user_id' in session:
         # What to do when logged in aka play music
+        pass
 
     playlist = []
     genre = "classical"
@@ -60,5 +61,8 @@ def callback():
     session['user_id'] = current_user['id']
 
     return redirect(url_for('index')) 
+
+if __name__ == '__main__':
+    app.run()
 
 
