@@ -1,7 +1,6 @@
 // JavaScript to show/hide the genre select dropdown
 const genreDropdown = document.getElementById('genreDropdown');
 const genreSelect = document.getElementById('genreSelect');
-
 genreDropdown.addEventListener('click', function () {
     genreSelect.classList.toggle('d-none');
 });
@@ -87,17 +86,20 @@ function getCadence() {
                 var energy = (cadence ** 2) * 0.035 * longAccelHist.reduce(adder) / longAccelHist.length;
                 headingElementEnergy.textContent = "Energy: " + energy;
                 
+                
 
-                if(notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
+                if(new Date.getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
                     song = getNewSong(playlist, cadence, energy, previousSongs);
-                    
+                    timeEnd = new Date.getTime() + (song.duration * 1000)
+                    document.getElementById("song").value = song.id;
+                    document.getElementById("song_request").onsubmit;
                 }
 
                 // Set another timeout for the next event processing after 100 milliseconds
             }
 
-            // Add an event listener for the initial devicemotion event
-            window.addEventListener('devicemotion', processMotionEvent);
+        // Add an event listener for the initial devicemotion event
+        window.addEventListener('devicemotion', processMotionEvent);
         } else {
             headingElement.textContent = "Permission not granted";
         }
