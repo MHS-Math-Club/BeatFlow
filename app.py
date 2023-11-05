@@ -7,8 +7,8 @@ from main import app
 from pyngrok import ngrok
 
 app.secret_key = "something"
-ngrok.set_auth_token('2Xjeq4GP6viuzqaDO9XrIeg31LX_53i3r6zsfhwkvpy9nMt1K')
-public_url = "https://f9da-129-130-19-169.ngrok-free.app    "
+# ngrok.set_auth_token('2Xjeq4GP6viuzqaDO9XrIeg31LX_53i3r6zsfhwkvpy9nMt1K')
+# public_url = "https://f9da-129-130-19-169.ngrok-free.app    "
 
 @app.route("/", methods=["GET", "POST"])
 def index():
