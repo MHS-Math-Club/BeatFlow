@@ -14,8 +14,6 @@ def index():
     if 'user_id' in session:
         device_id = getUserDevices(session)[0][1]
 
-        print(getTracks(session, '3kZRbFya6TbvvpVR0t8lOj'))
-
         genre = 'classical'
         playlist = []
         index = 0
