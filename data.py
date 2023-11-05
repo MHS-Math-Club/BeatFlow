@@ -48,6 +48,7 @@ def get_tracks_with_info(playlist_id):
             'id': track_id,
             'album': track['album']['name'],
             'duration': int(track['duration_ms'] / 1000),
+            'image': track['album']['images'][0]['url'],
             'tempo': dance_features['tempo'],
             'time_signature': dance_features['time_signature'],
             'energy': dance_features['energy'],
@@ -60,13 +61,25 @@ def get_tracks_with_info(playlist_id):
     
     return tracks_info
 
-data = sorted(get_tracks_with_info("4IAndRau2rqC9men6MMDGr"), key=lambda x: x['energy'])
+data0 = sorted(get_tracks_with_info("5x9vo8Qya9WpXc9bmf2s3a"), key=lambda x: x['energy'])
+data1 = sorted(get_tracks_with_info("2vD8cw6yYjtn2qewxBaJgj"), key=lambda x: x['energy'])
+data2 = sorted(get_tracks_with_info("3X32dduNQRkqAaYXz0DXHX"), key=lambda x: x['energy'])
+data3 = sorted(get_tracks_with_info("4IAndRau2rqC9men6MMDGr"), key=lambda x: x['energy'])
 
 # Convert the list of dictionaries to a JSON string
-json_string = json.dumps(data, indent=4)
+json_string0 = json.dumps(data0, indent=4)
+json_string1 = json.dumps(data1, indent=4)
+json_string2 = json.dumps(data2, indent=4)
+json_string3 = json.dumps(data3, indent=4)
 
 # Write the JSON string to a file
-with open("static/data/classical", "w") as json_file:
-    json_file.write(json_string)
+with open("static/data/hiphop.json", "w") as json_file:
+    json_file.write(json_string0)
+with open("static/data/edm.json", "w") as json_file:
+    json_file.write(json_string1)
+with open("static/data/pop.json", "w") as json_file:
+    json_file.write(json_string2)
+with open("static/data/classical.json", "w") as json_file:
+    json_file.write(json_string3)
 
 print("Data has been written.")

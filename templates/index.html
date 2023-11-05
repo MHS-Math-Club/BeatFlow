@@ -52,18 +52,18 @@
                 <div class="container text-center">
                     <div class="row">
                         <div class="col-md-6 mx-auto">
-                            <img id="art" src="{{ image }}" alt="song cover" class="img-fluid">
+                            <img id="art" src="{{ playlist[index]['image'] }}" alt="song cover" class="img-fluid">
                             <ul class="list-unstyled mt-3">
-                                <li><strong>Song Name:</strong> {{ playlist[0]['name'] }}</li>
+                                <li><strong>Song Name:</strong> {{ playlist[index]['name'] }}</li>
                                 <li>
-                                    <strong>{% if playlist[0]['artists'] |length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
-                                    {% if playlist[0]['artists']|length > 1 %}
-                                        {{ playlist[0]['artists']|join(', ') }}
+                                    <strong>{% if playlist[index]['artists'] |length > 1 %}Artists{% else %}Artist{% endif %}:</strong>
+                                    {% if playlist[index]['artists']|length > 1 %}
+                                        {{ playlist[index]['artists']|join(', ') }}
                                     {% else %}
-                                        {{ playlist[0]['artists'][0] }}
+                                        {{ playlist[index]['artists'][0] }}
                                     {% endif %}
                                 </li>
-                                <li><strong>Energy:</strong> {{ (playlist[0]['energy'] * 100) | round|int }}</li>
+                                <li><strong>Energy:</strong> {{ (playlist[index]['energy'] * 100) | round|int }}</li>
                             </ul>
                         </div>
                     </div>
