@@ -79,6 +79,8 @@ function getCadence() {
             let timeHist = [0]
             let longAccelHist = [1, 1]
             let cadence = 0
+            song = playlist[0]
+            timeEnd = new Date.getTime() + (song.duration * 1000)
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
             var headingElementCadence = document.getElementById("cadence_value")
