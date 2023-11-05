@@ -3,12 +3,13 @@ import json
 from flask import Flask, render_template, request, redirect, session, make_response, url_for
 from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack, getTracks
 import time
+import random
 from main import app
 from pyngrok import ngrok
 
 app.secret_key = "something"
 ngrok.set_auth_token('2Xjeq4GP6viuzqaDO9XrIeg31LX_53i3r6zsfhwkvpy9nMt1K')
-public_url = "https://3997-129-130-19-169.ngrok-free.app"
+public_url = "https://f9da-129-130-19-169.ngrok-free.app"
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -32,21 +33,25 @@ def index():
 
         if request.method == "POST":
             if request.form.get('index') is None:
+                print("NONE")
                 playTrack(session, playlist[index]['id'], device_id)
             else:
                 index = request.form.get('index')
                 old_index = request.form.get('old-index')
                 if index != old_index:
+                    print("SWITCH")
+                    index = int(index)
                     playTrack(session, playlist[index]['id'], device_id)
-        else:
-            file_path = f'static/data/{genre}.json'
-            with open(file_path, 'r') as json_file:
-                playlist = json.load(json_file)
-            
+                else:
+                    print("STAY")
+
+        index = int(index)
+        print(genre)
+        print(playlist[index])
+
         return render_template("index.html", playlist=playlist, genre=genre, index=index)
     else:
         return redirect(url_for('auth'))
-
 
 @app.route("/auth")
 def auth():
@@ -83,5 +88,3 @@ def callback():
 
 if __name__ == '__main__':
     app.run(port=5003, debug=True)
-
-

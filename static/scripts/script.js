@@ -3,14 +3,8 @@ const genreDropdown = document.getElementById('genreDropdown');
 const genreSelect = document.getElementById('genreSelect');
 let energy = 0;
 let netAccel = 0;
-let cadence = 0;
-let min_cadence = 80;
-let max_cadence = 200;
-
-const intervalId = setInterval(() => {
-  nextSong(cadence);
-}, 5000);
-
+var min_cadence = 80;
+var max_cadence = 200;
 
 // JavaScript function
 function openPopup() {
@@ -20,6 +14,7 @@ function openPopup() {
 
 function closePopup() {
     var popup = document.getElementById("popup");
+    var done = true;
     popup.style.display = "none";
     // Store a flag in localStorage to indicate that the popup has been closed
    localStorage.setItem('popupClosed', 'true');
@@ -91,9 +86,8 @@ function throttle(func, delay) {
 }
 
 function getRandomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min)) + min;
 }
-
 
 function nextSong(cadence) {
     const division = Math.floor((max_cadence - min_cadence) / 5);
@@ -118,6 +112,8 @@ function nextSong(cadence) {
     document.getElementById("old-genre").value = genre;
 
     send.submit();
+
+    console.log("sent abvoe")
 }
 
 function Compute() {
@@ -149,10 +145,10 @@ function Compute() {
                     if((avgHist[0] + 0.3 < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length - 1] + 0.3 < avgHist[Math.floor(avgHist.length / 2)]) ){
                         
                         pTime = new Date().getTime();
-                        if(pTime - timeHist[timeHist.length - 1] > 80){
+                        if(pTime - timeHist[timeHist.length - 1] > 300){
                             console.log('Peak detected at average acceleration: ' + avgHist[Math.floor(avgHist.length / 2)])
                             //log times
-                            if (timeHist.length > 20){
+                            if (timeHist.length > 5){
                                 timeHist.shift();
                             }
                         
@@ -165,10 +161,12 @@ function Compute() {
                             avgDiff = tdiffHist.reduce((a, b) => a + b) / tdiffHist.length;
     
                             cadence = 60000 / avgDiff;
+                            console.log(cadence)
                             headingElementCadence.textContent = "Cadence: " + cadence;
                         }
                     }
                 }
+
                 
 
                 accelHist.push(netAccel);              
@@ -181,12 +179,16 @@ function Compute() {
 
             }
 
-            // Add an event listener for the initial devicemotion event
-            const throttledProcessMotionEvent = throttle(processMotionEvent, 1000);
-            window.addEventListener('devicemotion', processMotionEvent);
+            const intervalId = setInterval(() => {
+                console.log("RUNNING")
+                nextSong(cadence);
+            }, 20000);  
+
+        // Add an event listener for the initial devicemotion event
+        // const throttledProcessMotionEvent = throttle(processMotionEvent, 1000);
+        window.addEventListener('devicemotion', processMotionEvent);
         } else {
             headingElement.textContent = "Permission not granted";
         }
         });
     }
-

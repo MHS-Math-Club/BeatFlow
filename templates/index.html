@@ -9,7 +9,7 @@
     <script>
         var playlist = {{ playlist|tojson|safe }};
         var index = {{ index }}
-        var genre = {{ genre }}
+        var genre = '{{ genre }}'
     </script>
     <script src="/static/scripts/script.js"></script>
 </head>
@@ -18,7 +18,7 @@
     <div class="popup" id="popup">
         <div class="popup-content">
           <p>Allow Sensor Access</p>
-          <button onclick="getCadence(); closePopup();">Allow</button>
+          <button onclick="Compute(); closePopup();">Allow</button>
         </div>
     </div>
     <header>
@@ -38,7 +38,7 @@
                     <form id="genre-form" action="/" method="POST">
                         <h3>
                             I want the genre
-                            <span class="genre-dropdown" id="genreDropdown" onclick="getCadence()">{{ genre }}</span>
+                            <span class="genre-dropdown" id="genreDropdown" onclick="Compute()">{{ genre }}</span>
                             <select class="form-control custom-dropdown" id="genreSelect" name="genre">
                                 <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
                                 <option value ="hiphop" {% if genre == "hiphop" %}selected{% endif %}>hiphop</option>
@@ -47,9 +47,14 @@
                             </select>
                         </h3>
                     </form>
-                    <h3 id="accel_value">0</h3>
-                    <h3 id="energy_value">0</h3>
-                    <h3 id="cadence_value">0</h3>
+                    <script>
+                        window.onload = function() {
+                            var genreDropdown = document.getElementById("genreDropdown");
+                            genreDropdown.click();
+                        };
+                    </script>
+                    <h3 id="accel_value">Acceleration: 0</h3>
+                    <h3 id="cadence_value">Cadence: 0</h3>
                 </div>
             </div>
         </div>
