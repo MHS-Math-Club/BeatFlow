@@ -4,7 +4,6 @@ from flask import Flask, render_template, request, redirect, session, make_respo
 from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack
 import time
 from main import app
-from pyngrok import ngrok
 
 app.secret_key = "something"
 # ngrok.set_auth_token('2Xjeq4GP6viuzqaDO9XrIeg31LX_53i3r6zsfhwkvpy9nMt1K')
