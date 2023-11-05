@@ -37,7 +37,7 @@ def get_tracks_with_info(playlist_id):
 
         endpoint = f"https://api.spotify.com/v1/audio-features/{track_id}"
         response = requests.get(endpoint, headers=headers)
-        dance_features = response.json()
+        audio_features = response.json()
 
         artist_names = [artist['name'] for artist in track['artists']]
 
@@ -49,12 +49,12 @@ def get_tracks_with_info(playlist_id):
             'album': track['album']['name'],
             'duration': int(track['duration_ms'] / 1000),
             'image': track['album']['images'][0]['url'],
-            'tempo': dance_features['tempo'],
-            'time_signature': dance_features['time_signature'],
-            'energy': dance_features['energy'],
-            'happiness': dance_features['valence'],
-            'loudness': dance_features['loudness'],
-            'danceability': dance_features['danceability']
+            'tempo': audio_features['tempo'],
+            'time_signature': audio_features['time_signature'],
+            'energy': audio_features['energy'],
+            'happiness': audio_features['valence'],
+            'loudness': audio_features['loudness'],
+            'danceability': audio_features['danceability']
         }   
             
         tracks_info.append(track_info)

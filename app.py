@@ -1,7 +1,7 @@
 import requests
 import json
 from flask import Flask, render_template, request, redirect, session, make_response, url_for
-from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack
+from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack, getTracks
 import time
 from main import app
 
@@ -13,6 +13,8 @@ app.secret_key = "something"
 def index():
     if 'user_id' in session:
         device_id = getUserDevices(session)[0][1]
+
+        print(getTracks(session, '3kZRbFya6TbvvpVR0t8lOj'))
 
         genre = 'classical'
         playlist = []

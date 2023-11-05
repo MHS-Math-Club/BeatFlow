@@ -204,3 +204,38 @@ def getAudioFeatures(session, track_id):
 	data = {}
 	payload = makeGetRequest(session, url)
 	return payload
+
+def getTracks(session, playlist_id):
+    url = f"https://open.spotify.com/playlist/{playlist_id}"
+    playlist_data = makeGetRequest(session, url)
+    tracks_info = []
+
+    for item in playlist_data['items']:
+        track_id = item['track']['id']
+
+        endpoint = f"https://api.spotify.com/v1/audio-features/{track_id}"
+        audio_features = makeGetRequest(session, endpoint)
+
+        track_url = f"https://api.spotify.com/v1/me/player/play/{track_id}"
+        track = makeGetRequest(session, track_url)
+
+        artist_names = [artist['name'] for artist in track['artists']]
+
+        
+        track_info = {
+            'name': track['name'],
+            'artists': artist_names,
+            'id': track_id,
+            'album': track['album']['name'],
+            'duration': int(track['duration_ms'] / 1000),
+            'image': track['album']['images'][0]['url'],
+            'tempo': audio_features['tempo'],
+            'time_signature': audio_features['time_signature'],
+            'energy': audio_features['energy'],
+            'happiness': audio_features['valence'],
+            'loudness': audio_features['loudness'],
+            'danceability': audio_features['danceability']
+        }   
+            
+        tracks_info.append(track_info)
+    return tracks_info
