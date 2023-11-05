@@ -79,11 +79,12 @@ function getCadence() {
             let timeHist = [0]
             let longAccelHist = [1, 1]
             let cadence = 0
-            let song = playlist[0]
-            let timeEnd = Date.now() + (song.duration * 1000)
+            song = playlist[0]
+            timeEnd = new Date.getTime() + (song.duration * 1000)
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
-            var headingElementCadence = document.getElementById("cadence_value")
+            var headingElementCadence = document.getElementById("cadence_value");
+            var headingElementTime = document.getElementById("time_remaining");
 
             function processMotionEvent(event) {
                 var netAccel = Math.round(Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2));
@@ -142,7 +143,7 @@ function getCadence() {
                 if (longAccelHist.length > 10){
                     longAccelHist.shift();
                 }
-                energy = (cadence ** 1.5) * 0.008 * longAccelHist.reduce(adder) / longAccelHist.length;
+                energy = (cadence ** 1.5) * 0.0008 * longAccelHist.reduce(adder) / longAccelHist.length;
                 headingElementEnergy.textContent = "Energy: " + parseFloat(energy.toFixed(1));
                 
 
@@ -152,7 +153,7 @@ function getCadence() {
                     updateChart(parsed)
                 }
 
-                
+                headingElementTime.textContent = "Milliseconds remaining: " + (timeEnd - Date.getTime())
                 if(new Date.getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
                     song = getNewSong(playlist, cadence, energy, previousSongs);
                     document.getElementById("song").value = song.id;
@@ -173,6 +174,7 @@ function getCadence() {
 
 
 function getNewSong(songList, idealTempo, idealEnergy, previousSongs){
+    //pick a new song
     let bestSong = songList[0];
     let bestScore = 0;
     for(i = 0; i < songList.length; i++){
@@ -187,12 +189,14 @@ function getNewSong(songList, idealTempo, idealEnergy, previousSongs){
 }
 
 function adjustTempo(tempo, cadence){
+    //find if half or double time
     let possibleTempos = [tempo / 2, tempo, tempo * 2]
     possibleTempos.sort(function(a, b){return Math.abs(a - cadence) - Math.abs(b - cadence)})
     return possibleTempos[0]
 }
 
 function scoreSong(song, idealTempo, idealEnergy, previousSongs){
+    //calculate score for song
     tempoScore = 1 / Math.abs(adjustTempo(song.tempo) - idealTempo);
     energyScore = 1 / Math.abs(song.energy * 100 - idealEnergy);
     rhythmScore = Math.sqrt(song.danceability);
