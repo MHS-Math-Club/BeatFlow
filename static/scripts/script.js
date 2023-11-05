@@ -33,10 +33,15 @@ function getCadence() {
                 headingElement.textContent = "Acceleration: " + parsed;
 
                 //acceleration smoothing
-                if (accelHist.length > 100) {
+                if (accelHist.length > 50) {
                     avgAccel = accelHist.reduce(adder) / accelHist.length;
                     accelHist = []
                     
+                    if (avgHist.length > 3) {
+                        avgHist.shift();
+                    }
+                    avgHist.push(avgAccel)
+
                     //peak detection
                     if((avgHist[0] < avgHist[1] && avgHist[2] < avgHist[1]) ){
                         longAccelHist.push(netAccel)
@@ -60,17 +65,14 @@ function getCadence() {
                         headingElementCadence.textContent = "Cadence: " + cadence;
                     }
                 }
-                accelHist.push(netAccel);              
+                
 
+                accelHist.push(netAccel);              
+                
+                //for averages
                 function adder(total, value, index, array){
                     return total + value;
                 }
-
-                if (avgHist.length > 1000) {
-                    avgHist.shift();
-                }
-                avgHist.push(avgAccel)
-                
                 
                 //Calculate energy
                 if (longAccelHist.length > 10){
