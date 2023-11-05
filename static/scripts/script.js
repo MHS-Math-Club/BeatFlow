@@ -79,8 +79,8 @@ function getCadence() {
             let timeHist = [0]
             let longAccelHist = [1, 1]
             let cadence = 0
-            song = playlist[0]
-            timeEnd = new Date.getTime() + (song.duration * 1000)
+            let song = playlist[0]
+            let timeEnd = Date.now() + (song.duration * 1000)
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
             var headingElementCadence = document.getElementById("cadence_value")
@@ -142,7 +142,7 @@ function getCadence() {
                 if (longAccelHist.length > 10){
                     longAccelHist.shift();
                 }
-                energy = (cadence ** 1.5) * 0.0008 * longAccelHist.reduce(adder) / longAccelHist.length;
+                energy = (cadence ** 1.5) * 0.008 * longAccelHist.reduce(adder) / longAccelHist.length;
                 headingElementEnergy.textContent = "Energy: " + parseFloat(energy.toFixed(1));
                 
 
