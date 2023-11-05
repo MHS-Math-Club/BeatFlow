@@ -88,7 +88,7 @@ function getCadence() {
             var headingElementTime = document.getElementById("time_remaining");
 
             function processMotionEvent(event) {
-                var netAccel = Math.round(Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2));
+                var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
                 let parsed = parseFloat(netAccel.toFixed(1));
                 let i = 0;
                 headingElement.textContent = "Acceleration: " + parsed;
@@ -158,6 +158,7 @@ function getCadence() {
                 if(new Date().getTime() >= timeEnd || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
                     previousSongs.push(song.id);
                     song = getNewSong(playlist, cadence, energy, previousSongs);
+                    var form = document.getElementById("song_request")
                     var songInput = document.getElementById("song");
                     songInput.value = song.id;
                     form.submit()
@@ -173,41 +174,3 @@ function getCadence() {
         }
         });
     }
-
-
-function getNewSong(songList, idealTempo, idealEnergy, previousSongs){
-    //pick a new song
-    let bestSong = songList[0];
-    let bestScore = 0;
-    for(i = 0; i < songList.length; i++){
-        let score = scoreSong(songList[i], idealTempo, idealEnergy, previousSongs);
-        if(score > bestScore){
-            bestSong = songList[i];
-            bestScore = score
-        }
-        
-    }
-    return bestSong;
-}
-
-function adjustTempo(tempo, cadence){
-    //find if half or double time
-    let possibleTempos = [tempo / 2, tempo, tempo * 2]
-    possibleTempos.sort(function(a, b){return Math.abs(a - cadence) - Math.abs(b - cadence)})
-    return possibleTempos[0]
-}
-
-function scoreSong(song, idealTempo, idealEnergy, previousSongs){
-    //calculate score for song
-    tempoScore = 1 / Math.abs(adjustTempo(song.tempo, cadence) - idealTempo);
-    energyScore = 1 / Math.abs(song.energy * 100 - idealEnergy);
-    rhythmScore = Math.sqrt(song.danceability);
-    score = 0.4 * rhythmScore + 0.3 * tempoScore + 0.3 * energyScore;
-    if(song.time_signature % 2 > 0){
-        score *= 0.5;
-    }
-    if(previousSongs.includes(song.id)){
-        score *= 0.5;
-    }
-    return score;
-}
