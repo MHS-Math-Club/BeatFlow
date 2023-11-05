@@ -195,7 +195,6 @@ def addToQueue(session, track_id):
 	return payload
 
 def playTrack(session, track_id, device):
-	pausePlayback(session)
 	addToQueue(session, track_id)
 	skipTrack(session)
 	startPlayback(session, device)
