@@ -145,17 +145,18 @@ function getCadence() {
                 
 
                 if (parsed < 1) {
-                    return updateChart(parsed * 10)
+                    updateChart(parsed * 10)
                 } else {
-                    return updateChart(parsed)
+                    updateChart(parsed)
                 }
 
                 
                 if(new Date.getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
                     song = getNewSong(playlist, cadence, energy, previousSongs);
-                    timeEnd = new Date.getTime() + (song.duration * 1000)
                     document.getElementById("song").value = song.id;
-                    document.getElementById("song_request").onsubmit;
+                    document.getElementById("song_request").submit();
+                    timeEnd = new Date.getTime() + (song.duration * 1000)
+                    warn("Song request submitted")
                 }
 
             }
