@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function() {
     var form = document.getElementById("genre-form");
     
     form.addEventListener("change", function() {
-        // Submit the form when any form element changes
         form.submit();
     });
 });
@@ -74,103 +73,72 @@ function updateChart(newValue) {
 function getCadence() {
     DeviceMotionEvent.requestPermission().then(response => {
         if (response == 'granted') {
-            let accelHist = []
-            let avgHist = [0, 0, 0]
-            let timeHist = [0]
-            let longAccelHist = [1, 1]
-            let cadence = 0
-            let song = playlist[0]
-            let timeEnd = new Date().getTime() + (song.duration * 1000)
-            let previousSongs = [];
-            var headingElementEnergy = document.getElementById("energy_value");
-            var headingElement = document.getElementById("accel_value");
-            var headingElementCadence = document.getElementById("cadence_value");
-            var headingElementTime = document.getElementById("time_remaining");
+            let accelHist = [];
+            let avgHist = [0];
+            let timeHist = [0];
+            let longAccelHist = [];
+            let cadence = 0;
 
             function processMotionEvent(event) {
                 var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
                 let parsed = parseFloat(netAccel.toFixed(1));
-                let i = 0;
-                headingElement.textContent = "Acceleration: " + parsed;
 
-                //acceleration smoothing
+                // Acceleration smoothing
                 if (accelHist.length > 20) {
                     avgAccel = accelHist.reduce(adder) / accelHist.length;
-                    accelHist.shift()
-                    
+                    accelHist.shift();
+
                     if (avgHist.length > 20) {
                         avgHist.shift();
                     }
-                    avgHist.push(avgAccel)
+                    avgHist.push(avgAccel);
 
-                    //peak detection
-                    if((avgHist[0] + 0.3 < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length - 1] + 0.3 < avgHist[Math.floor(avgHist.length / 2)]) ){
-                        
+                    // Peak detection
+                    if ((avgHist[0] + 0.3 < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length - 1] + 0.3 < avgHist[Math.floor(avgHist.length / 2)])) {
+
                         pTime = new Date().getTime();
-                        if(pTime - timeHist[timeHist.length - 1] > 300){
+                        if (pTime - timeHist[timeHist.length - 1] > 300) {
 
-                            longAccelHist.push(netAccel)
-                            console.log('Peak detected at average acceleration: ' + avgHist[Math.floor(avgHist.length / 2)])
-                            //log times
-                            if (timeHist.length > 20){
+                            longAccelHist.push(netAccel);
+                            console.log('Peak detected at average acceleration: ' + avgHist[Math.floor(avgHist.length / 2)]);
+
+                            // Log times
+                            if (timeHist.length > 20) {
                                 timeHist.shift();
                             }
-                        
+
                             timeHist.push(pTime);
                             let tdiffHist = [0];
-                            for(i = 1; i < timeHist.length; i++){
+                            for (let i = 1; i < timeHist.length; i++) {
                                 tdiffHist[i] = timeHist[i] - timeHist[i - 1];
                             }
 
-                            //calculate cadence
-    
+                            // Calculate cadence
                             avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
-    
                             cadence = 60000 / avgDiff;
-                            headingElementCadence.textContent = "Cadence: " + parseFloat(cadence.toFixed(1));
+                            // Update your UI with cadence value
+                            updateCadenceUI(cadence);
                         }
                     }
                 }
-                
 
-                accelHist.push(netAccel);              
-                
-                //for averages
-                function adder(total, value, index, array){
+                accelHist.push(netAccel);
+
+                // For averages
+                function adder(total, value) {
                     return total + value;
                 }
-
-                //Calculate energy
-                if (longAccelHist.length > 10){
-                    longAccelHist.shift();
-                }
-                energy = (cadence ** 1.5) * 0.0008 * longAccelHist.reduce(adder) / longAccelHist.length;
-                headingElementEnergy.textContent = "Energy: " + parseFloat(energy.toFixed(1));
-                
-
-                if (parsed < 1) {
-                    updateChart(parsed * 10)
-                } else {
-                    updateChart(parsed)
-                }
-
-                headingElementTime.textContent = "Milliseconds remaining: " + (timeEnd - new Date().getTime())
-                if(new Date().getTime() >= timeEnd || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
-                    previousSongs.push(song.id);
-                    song = getNewSong(playlist, cadence, energy, previousSongs);
-                    var form = document.getElementById("song_request")
-                    var songInput = document.getElementById("song");
-                    songInput.value = song.id;
-                    form.submit()
-                    alert("Song request submitted");    
-                }   
-
             }
-
-        // Add an event listener for the initial devicemotion event
-        window.addEventListener('devicemotion', processMotionEvent);
-        } else {
-            headingElement.textContent = "Permission not granted";
         }
-        });
     }
+
+    function updateCadenceUI(cadence) {
+        // Update your UI with the cadence value
+        var headingElementCadence = document.getElementById("cadence_value");
+        headingElementCadence.textContent = "Cadence: " + parseFloat(cadence.toFixed(1));
+    }
+}
+
+
+
+
