@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/static/images/me.png">
@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  
     <script>
         var playlist = {{ playlist|tojson|safe }};
-        console.log(playlist);
     </script>
     <script src="/static/scripts/script.js"></script>
 </head>
+
 <body>
     <div class="popup" id="popup">
         <div class="popup-content">
-            <p>Allow Sensor Access</p>
-            <button onclick="Compute(); closePopup();">Allow</button>
+          <p>Allow Sensor Access</p>
+          <button onclick="Compute(); closePopup();">Allow</button>
         </div>
     </div>
     <header>
@@ -33,20 +33,19 @@
             <div id="data" class="col-md-12 centered-div">
                 <div>
                     <div class="container">
-                        <form id="genre-form" action="/" method="POST">
-                            <h3>
-                                I want the genre
-                                <span class="genre-dropdown" id="genreDropdown" onclick="Compute()">{{ genre }}</span>
-                                <select class="form-control custom-dropdown" id="genreSelect" name="genre">
-                                    <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
-                                    <option value="hiphop" {% if genre == "hiphop" %}selected{% endif %}>hiphop</option>
-                                    <option value="pop" {% if genre == "pop" %}selected{% endif %}>pop</option>
-                                    <option value="edm" {% if genre == "edm" %}selected{% endif %}>edm</option>
-                                </select>
-                            </h3>
-                        </form>
-                        <h3 id="accel_value">Acceleration: 0</h3>
-                    </div>
+                    <form id="genre-form" action="/" method="POST">
+                        <h3>
+                            I want the genre
+                            <span class="genre-dropdown" id="genreDropdown" onclick="Compute()">{{ genre }}</span>
+                            <select class="form-control custom-dropdown" id="genreSelect" name="genre">
+                                <option value="classical" {% if genre == "classical" %}selected{% endif %}>classical</option>
+                                <option value ="hiphop" {% if genre == "hiphop" %}selected{% endif %}>hiphop</option>
+                                <option value="pop" {% if genre == "pop" %}selected{% endif %}>pop</option>
+                                <option value="edm" {% if genre == "edm" %}selected{% endif %}>edm</option>
+                            </select>
+                        </h3>
+                    </form>
+                    <h3 id="accel_value">Acceleration: 0</h3>
                 </div>
             </div>
         </div>
@@ -77,6 +76,7 @@
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -86,25 +86,73 @@
         var ctx = document.getElementById("myChart").getContext("2d");
       
         var data = {
-            labels: [], 
-            datasets: [
-                {
-                    label: "Your Data",
-                    data: [], 
-                    backgroundColor: "rgba(75, 192, 192, 0.2)", 
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    borderWidth: 2,
-                },
-            ],
+          labels: [], 
+          datasets: [
+            {
+              label: "Acceleration",
+              data: [], 
+              backgroundColor: "black", 
+              borderColor: "black",
+              borderWidth: 5,
+            },
+          ],
         };
       
         var myChart = new Chart(ctx, {
-            type: "line",
-            data: data,
+          type: "line",
+          data: data,
+        });
+      </script>
+    <form action ="/" method ="post" id ="song_request">
+        <input type="hidden" id="song">
+    </form>
+    <div id="average-color"></div>
+    <script>
+        function getAverageColor(imageUrl, callback) {
+            var img = new Image();
+            img.crossOrigin = 'Anonymous'; // Enable cross-origin resource sharing
+            img.src = imageUrl;
+            img.onload = function() {
+                var canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+        
+                var context = canvas.getContext('2d');
+                context.drawImage(img, 0, 0, img.width, img.height);
+        
+                var imageData = context.getImageData(0, 0, img.width, img.height).data;
+                var totalRed = 0, totalGreen = 0, totalBlue = 0;
+        
+                for (var i = 0; i < imageData.length; i += 4) {
+                totalRed += imageData[i];
+                totalGreen += imageData[i + 1];
+                totalBlue += imageData[i + 2];
+                }
+        
+                var averageRed = totalRed / (imageData.length / 4);
+                var averageGreen = totalGreen / (imageData.length / 4);
+                var averageBlue = totalBlue / (imageData.length / 4);
+        
+                var averageColor = {
+                red: Math.round(averageRed),
+                green: Math.round(averageGreen),
+                blue: Math.round(averageBlue)
+                };
+        
+                callback(averageColor);
+            };
+        }
+        
+          getAverageColor('{{ playlist[index]['image'] }}', function(averageColor) {
+            console.log(averageColor.red)
+            var body = document.body;
+            var gradientColor = `linear-gradient(to left top, rgb(${averageColor.red}, ${averageColor.green}, ${averageColor.blue}), rgb(${averageColor.red + 100}, ${averageColor.green + 100}, ${averageColor.blue + 100}))`;
+            console.log(gradientColor);
+            document.body.style.backgroundImage = gradientColor;
+        
         });
     </script>
-    <form action="/" method="POST" id="song_request">
-        <input type="text" id="song" hidden>
-    </form>
+      
 </body>
+
 </html>
