@@ -182,7 +182,7 @@ function Compute() {
             const intervalId = setInterval(() => {
                 console.log("RUNNING")
                 nextSong(cadence);
-            }, 5000);  
+            }, 10000);  
 
         // Add an event listener for the initial devicemotion event
         // const throttledProcessMotionEvent = throttle(processMotionEvent, 1000);
