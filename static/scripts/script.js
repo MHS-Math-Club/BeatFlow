@@ -35,17 +35,17 @@ function getCadence() {
                 //acceleration smoothing
                 if (accelHist.length > 50) {
                     avgAccel = accelHist.reduce(adder) / accelHist.length;
-                    accelHist = []
+                    accelHist.shift()
                     
-                    if (avgHist.length > 3) {
+                    if (avgHist.length > 20) {
                         avgHist.shift();
                     }
                     avgHist.push(avgAccel)
 
                     //peak detection
-                    if((avgHist[0] < avgHist[1] && avgHist[2] < avgHist[1]) ){
+                    if((avgHist[0] + 0.3 < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length - 1] + 0.3 < avgHist[Math.floor(avgHist.length / 2)]) ){
                         longAccelHist.push(netAccel)
-                        console.log('Peak detected at average acceleration: ' + avgHist[2])
+                        console.log('Peak detected at average acceleration: ' + avgHist[Math.floor(avgHist.length / 2)])
                         
                         //log times
                         if (timeHist.length > 5){

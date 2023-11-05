@@ -1,6 +1,7 @@
 import requests
+import json
 from flask import Flask, render_template, request, redirect, session, make_response, url_for
-from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack, getTrack
+from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack, getImage
 import time
 from main import app
 
@@ -10,8 +11,6 @@ app.secret_key = "something"
 def index():
     if 'user_id' in session:
         device_id = getUserDevices(session)[0][1]
-        playTrack(session, '3pv7Q5v2dpdefwdWIvE7yH', device_id)
-        info = getTrack(session, '3pv7Q5v2dpdefwdWIvE7yH')
 
         genre = 'classical'
         playlist = []
@@ -19,12 +18,15 @@ def index():
         if request.method == "POST":
             genre = request.form.get('genre')
 
-        file_path = f'static/data/{genre}.txt'
+        file_path = f'static/data/{genre}.json'
 
-        with open(file_path, 'r') as txt_file:
-            playlist = txt_file.read().splitlines()
+        with open(file_path, 'r') as json_file:
+            playlist = json.load(json_file)
+
+        playTrack(session, playlist[0]['id'], device_id)
+        image = getImage(session, playlist[0]['id'])
             
-        return render_template("index.html", playlist=playlist, img=info["img"], name=info["name"], genre=genre)
+        return render_template("index.html", playlist=playlist, image=image, genre=genre)
     else:
         return redirect(url_for('auth'))
 
