@@ -76,7 +76,7 @@ function getCadence() {
                 if (longAccelHist.length > 10){
                     longAccelHist.shift();
                 }
-                var energy = cadence * 0.05 * longAccelHist.reduce(adder) / accelHist;
+                var energy = (cadence ** 2) * 0.008 * longAccelHist.reduce(adder) / longAccelHist.length;
                 headingElementEnergy.textContent = "Energy: " + energy;
 
                 // Set another timeout for the next event processing after 100 milliseconds
@@ -88,4 +88,38 @@ function getCadence() {
             headingElement.textContent = "Permission not granted";
         }
         });
+    }
+
+    function getNewSong(songList, idealTempo, idealEnergy, previousSongs){
+        let bestSong = songList[0];
+        let bestScore = -1000000;
+        for(i = 0; i < songList.length; i++){
+            let score = scoreSong(songList[i], idealTempo, idealEnergy);
+            if(previousSongs.includes(songList[i].id)){
+                score -= 0.5;
+            }
+            if(score > bestScore){
+                bestSong = songList[i];
+                bestScore = score
+            }
+    
+        }
+        return bestSong.id;
+    }
+    
+    function adjustTempo(tempo, cadence){
+        let possibleTempos = [tempo / 2, tempo, tempo * 2];
+        possibleTempos.sort(function(a, b){return Math.abs(a - cadence) - Math.abs(b - cadence)});
+        return possibleTempos[0];
+    }
+
+    function scoreSong(song, idealTempo, idealEnergy){
+        tempoScore = 1 / Math.abs(adjustTempo(song.tempo) - idealTempo);
+        energyScore = 1 / Math.abs(song.energy * 100 - idealEnergy);
+        rhythmScore = Math.sqrt(song.danceability);
+        score = 0.6 * rhythmScore + 0.3 * tempoScore + 0.1 * energyScore;
+        if(song.time_signature % 2 > 0){
+            score *= 0.5;
+        }
+        return score;
     }
