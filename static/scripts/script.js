@@ -79,8 +79,8 @@ function getCadence() {
             let timeHist = [0]
             let longAccelHist = [1, 1]
             let cadence = 0
-            song = playlist[0]
-            timeEnd = new Date.getTime() + (song.duration * 1000)
+            let song = playlist[0]
+            let timeEnd = new Date().getTime() + (song.duration * 1000)
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
             var headingElementCadence = document.getElementById("cadence_value");
@@ -153,12 +153,12 @@ function getCadence() {
                     updateChart(parsed)
                 }
 
-                headingElementTime.textContent = "Milliseconds remaining: " + (timeEnd - Date.getTime())
-                if(new Date.getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
+                headingElementTime.textContent = "Milliseconds remaining: " + (timeEnd - new Date().getTime())
+                if(new Date().getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
                     song = getNewSong(playlist, cadence, energy, previousSongs);
                     document.getElementById("song").value = song.id;
                     document.getElementById("song_request").submit();
-                    timeEnd = new Date.getTime() + (song.duration * 1000)
+                    timeEnd = new Date().getTime() + (song.duration * 1000)
                     alert("Song request submitted");
                 }
 
@@ -197,7 +197,7 @@ function adjustTempo(tempo, cadence){
 
 function scoreSong(song, idealTempo, idealEnergy, previousSongs){
     //calculate score for song
-    tempoScore = 1 / Math.abs(adjustTempo(song.tempo) - idealTempo);
+    tempoScore = 1 / Math.abs(adjustTempo(song.tempo, cadence) - idealTempo);
     energyScore = 1 / Math.abs(song.energy * 100 - idealEnergy);
     rhythmScore = Math.sqrt(song.danceability);
     score = 0.4 * rhythmScore + 0.3 * tempoScore + 0.3 * energyScore;
