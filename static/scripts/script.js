@@ -81,6 +81,7 @@ function getCadence() {
             let cadence = 0
             let song = playlist[0]
             let timeEnd = new Date().getTime() + (song.duration * 1000)
+            let previousSongs = [];
             var headingElementEnergy = document.getElementById("energy_value");
             var headingElement = document.getElementById("accel_value");
             var headingElementCadence = document.getElementById("cadence_value");
@@ -154,13 +155,14 @@ function getCadence() {
                 }
 
                 headingElementTime.textContent = "Milliseconds remaining: " + (timeEnd - new Date().getTime())
-                if(new Date().getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
+                if(new Date().getTime() >= timeEnd || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
+                    previousSongs.push(song.id);
                     song = getNewSong(playlist, cadence, energy, previousSongs);
-                    document.getElementById("song").value = song.id;
-                    document.getElementById("song_request").submit();
-                    timeEnd = new Date().getTime() + (song.duration * 1000)
-                    alert("Song request submitted");
-                }
+                    var songInput = document.getElementById("song");
+                    songInput.value = song.id;
+                    form.submit()
+                    alert("Song request submitted");    
+                }   
 
             }
 
