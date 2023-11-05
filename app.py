@@ -1,7 +1,7 @@
 import requests
 import json
 from flask import Flask, render_template, request, redirect, session, make_response, url_for
-from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack, getImage
+from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack
 import time
 from main import app
 from pyngrok import ngrok
@@ -27,9 +27,8 @@ def index():
             playlist = json.load(json_file)
 
         playTrack(session, playlist[0]['id'], device_id)
-        image = getImage(session, playlist[0]['id'])
             
-        return render_template("index.html", playlist=playlist, image=image, genre=genre)
+        return render_template("index.html", playlist=playlist, genre=genre)
     else:
         return redirect(url_for('auth'))
 

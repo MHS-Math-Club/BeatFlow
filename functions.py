@@ -291,13 +291,3 @@ def getAudioFeatures(session, track_id):
 	data = {}
 	payload = makeGetRequest(session, url)
 	return payload
-
-def getImage(session, track_id):
-    url = f'https://api.spotify.com/v1/tracks/{track_id}'
-    payload = makeGetRequest(session, url)
-
-    if payload is None:
-        return None
-
-    return payload['album']['images'][0]['url']
-
