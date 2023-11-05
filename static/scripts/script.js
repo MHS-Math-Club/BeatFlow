@@ -86,7 +86,7 @@ function getCadence() {
             var headingElementCadence = document.getElementById("cadence_value")
 
             function processMotionEvent(event) {
-                var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
+                var netAccel = Math.round(Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2));
                 let parsed = parseFloat(netAccel.toFixed(1));
                 let i = 0;
                 headingElement.textContent = "Acceleration: " + parsed;
@@ -142,7 +142,7 @@ function getCadence() {
                 if (longAccelHist.length > 10){
                     longAccelHist.shift();
                 }
-                energy = (cadence ** 1.5) * 0.00008 * longAccelHist.reduce(adder) / longAccelHist.length;
+                energy = (cadence ** 1.5) * 0.0008 * longAccelHist.reduce(adder) / longAccelHist.length;
                 headingElementEnergy.textContent = "Energy: " + parseFloat(energy.toFixed(1));
                 
 
@@ -158,7 +158,7 @@ function getCadence() {
                     document.getElementById("song").value = song.id;
                     document.getElementById("song_request").submit();
                     timeEnd = new Date.getTime() + (song.duration * 1000)
-                    warn("Song request submitted")
+                    alert("Song request submitted");
                 }
 
             }
