@@ -135,27 +135,28 @@ function getCadence() {
                 function adder(total, value, index, array){
                     return total + value;
                 }
-                
+
                 //Calculate energy
                 if (longAccelHist.length > 10){
                     longAccelHist.shift();
                 }
                 energy = (cadence ** 1.5) * 0.00008 * longAccelHist.reduce(adder) / longAccelHist.length;
-
-                if(new Date.getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
-                    song = getNewSong(playlist, cadence, energy, previousSongs);
-                    timeEnd = new Date.getTime() + (song.duration * 1000)
-                    document.getElementById("song").value = song.id;
-                    document.getElementById("song_request").onsubmit;
-                }
-
                 headingElementEnergy.textContent = "Energy: " + parseFloat(energy.toFixed(1));
+                
+
                 if (parsed < 1) {
                     return updateChart(parsed * 10)
                 } else {
                     return updateChart(parsed)
                 }
 
+                
+                if(new Date.getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
+                    song = getNewSong(playlist, cadence, energy, previousSongs);
+                    timeEnd = new Date.getTime() + (song.duration * 1000)
+                    document.getElementById("song").value = song.id;
+                    document.getElementById("song_request").onsubmit;
+                }
 
             }
 
