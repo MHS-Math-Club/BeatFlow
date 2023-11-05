@@ -1,4 +1,5 @@
 from flask import render_template, redirect, request
+from main import app
 import config
 import base64
 import os
@@ -31,7 +32,7 @@ Requests an access token from the Spotify API. Only called if no refresh token f
 current user exists.
 Returns: either [access token, refresh token, expiration time] or None if request failed
 """
-def getToken(code, app):
+def getToken(code):
 	token_url = 'https://accounts.spotify.com/api/token'
 	redirect_uri = app.config['REDIRECT_URI']
 	authorization = app.config['AUTHORIZATION']
@@ -54,12 +55,13 @@ Requests an access token from the Spotify API with a refresh token. Only called 
 token and refresh token were previously acquired.
 Returns: either [access token, expiration time] or None if request failed
 """
-def refreshToken(refresh_token, app):
+def refreshToken(refresh_token):
 	token_url = 'https://accounts.spotify.com/api/token'
 	authorization = app.config['AUTHORIZATION']
 
-	headers = {'Authorization': authorization, 'Accept': 'application/json', 'Content-Type': 'application/x-www-form-urlencoded'}
+	headers = {"Authorization": "Basic {}".format(authorization), 'Content-Type': 'application/x-www-form-urlencoded'}
 	body = {'refresh_token': refresh_token, 'grant_type': 'refresh_token'}
+
 	post_response = requests.post(token_url, headers=headers, data=body)
 
 	# 200 code indicates access token was properly granted
@@ -297,23 +299,8 @@ def getTrack(session, track_id):
     if payload is None:
         return None
 
-        audio_features = getAudioFeatures(session, track_id)
+    name = payload['name']
+    img = payload['album']['images'][0]['url']
 
-        artist_names = [artist['name'] for artist in track['artists']]
-
-        track_info = {
-            'name': track['name'],
-            'artists': artist_names,
-            'id': track_id,
-            'album': track['album']['name'],
-            'image': track['album']['images'][0]['url'],
-            'tempo': audio_features['tempo'],
-            'time_signature': audio_features['time_signature'],
-            'energy': audio_features['energy'],
-            'happiness': audio_features['valence'],
-            'loudness': audio_features['loudness'],
-            'danceability': audio_features['danceability']
-        }   
-
-    return track_info
+    return {'name': name, 'img': img}
 
