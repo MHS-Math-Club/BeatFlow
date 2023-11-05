@@ -18,7 +18,7 @@ def index():
 
         genre = 'classical'
         playlist = []
-        index = random.randint(1, 10)
+        index = random.randint(0, 9)
 
         if request.method == "POST":
             genre = request.form.get('genre')

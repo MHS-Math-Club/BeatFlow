@@ -4,33 +4,32 @@ const genreSelect = document.getElementById('genreSelect');
 let energy = 0;
 let netAccel = 0;
 
-// Function to open the popup
+// JavaScript function
 function openPopup() {
     var popup = document.getElementById("popup");
     popup.style.display = "flex";
 }
 
-// Function to close the popup
 function closePopup() {
     var popup = document.getElementById("popup");
     popup.style.display = "none";
     // Store a flag in localStorage to indicate that the popup has been closed
-    localStorage.setItem('popupClosed', 'true');
+   localStorage.setItem('popupClosed', 'true');
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
     var form = document.getElementById("genre-form");
-
-    form.addEventListener("change", function () {
+    
+    form.addEventListener("change", function() {
         // Submit the form when any form element changes
         form.submit();
     });
 });
 
-window.onload = function () {
+window.onload = function() {
     var popupClosed = localStorage.getItem('popupClosed');
     if (!popupClosed) {
-        openPopup();
+    openPopup();
     }
 }
 
@@ -43,9 +42,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-var maxDataPoints = 200; // Adjust this number as needed
+document.addEventListener('DOMContentLoaded', function() {
+    const genreSelect = document.getElementById('genreSelect');
+    const genreDropdown = document.getElementById('genreDropdown');
 
-// Function to update the chart
+    genreSelect.addEventListener('change', function() {
+        const selectedGenre = genreSelect.value;
+        genreDropdown.textContent = selectedGenre;
+        genreSelect.classList.add('d-none');
+    });
+});
+
+var maxDataPoints = 200; // Adjust this number as needed
 function updateChart(newValue) {
     // Add a new data point to the chart
     myChart.data.datasets[0].data.push(newValue);
@@ -63,56 +71,84 @@ function updateChart(newValue) {
     myChart.update();
 }
 
-function calculateCadence(netAccel) {
-    /// function
-}
-
-// Function to create a cadence stream
-function createCadenceStream(netAccel) {
-  const cadenceStream = {
-    onValue: function (callback) {
-      const interval = 1000; // Interval in milliseconds
-      setInterval(() => {
-        const cadence = calculateCadence(netAccel);
-        callback(cadence);
-      }, interval);
-    },
-  };
-  return cadenceStream;
+function throttle(func, delay) {
+    let lastCall = 0;
+    return function(...args) {
+        const now = Date.now();
+        if (now - lastCall >= delay) {
+            lastCall = now;
+            func(...args);
+        }
+    };
 }
 
 function Compute() {
     DeviceMotionEvent.requestPermission().then(response => {
         if (response == 'granted') {
+            let accelHist = []
+            let avgHist = [0, 0, 0]
+            let timeHist = [0]
+            let cadence = 0
             var headingElementAccel = document.getElementById("accel_value");
             var headingElementCadence = document.getElementById("cadence_value");
 
             function processMotionEvent(event) {
-                var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
-                let parsed = Math.round(parseFloat(netAccel.toFixed(1)));
-                headingElementAccel.textContent = "Acceleration: " + parsed;
+                var netAccel = Math.round(Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2));
+                let i = 0;
+                headingElementAccel.textContent = "Acceleration: " + netAccel;
 
-                if (parsed < 1) {
-                    updateChart(parsed * 10);
-                } else {
-                    updateChart(parsed);
+                //acceleration smoothing
+                if (accelHist.length > 20) {
+                    avgAccel = accelHist.reduce((a, b) => a + b) / accelHist.length;
+                    accelHist.shift()
+                    
+                    if (avgHist.length > 20) {
+                        avgHist.shift();
+                    }
+                    avgHist.push(avgAccel)
+
+                    //peak detection
+                    if((avgHist[0] + 0.3 < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length - 1] + 0.3 < avgHist[Math.floor(avgHist.length / 2)]) ){
+                        
+                        pTime = new Date().getTime();
+                        if(pTime - timeHist[timeHist.length - 1] > 80){
+                            console.log('Peak detected at average acceleration: ' + avgHist[Math.floor(avgHist.length / 2)])
+                            //log times
+                            if (timeHist.length > 20){
+                                timeHist.shift();
+                            }
+                        
+                            timeHist.push(pTime);
+                            let tdiffHist = [0];
+                            for(i = 1; i < timeHist.length; i++){
+                                tdiffHist[i] = timeHist[i] - timeHist[i - 1];
+                            }
+    
+                            avgDiff = tdiffHist.reduce((a, b) => a + b) / tdiffHist.length;
+    
+                            cadence = 60000 / avgDiff;
+                            headingElementCadence.textContent = "Cadence: " + cadence;
+                        }
+                    }
                 }
+                
 
-                // Cadence calculation
-                var cadenceStream = createCadenceStream(netAccel);
-                cadenceStream.onValue(function(val) {
-                    headingElementCadence.textContent = val;
-                });
+                accelHist.push(netAccel);              
+                
+                if (netAccel < 1) {
+                    updateChart(netAccel * 10)
+                } else {
+                    updateChart(netAccel)
+                }
 
             }
 
-            // Add an event listener for the initial devicemotion event
-            window.addEventListener('devicemotion', processMotionEvent);
+        // Add an event listener for the initial devicemotion event
+        const throttledProcessMotionEvent = throttle(processMotionEvent, 1000);
+        window.addEventListener('devicemotion', processMotionEvent);
         } else {
-            headingElementAccel.textContent = "Permission not granted";
+            headingElement.textContent = "Permission not granted";
         }
-    });
-}
-
-
+        });
+    }
 
