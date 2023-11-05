@@ -217,7 +217,7 @@ def getAudioFeatures(session, track_id):
 	payload = makeGetRequest(session, url)
 	return payload
 
-def getTracks(session, playlist_id, ifWritetoFile):
+def getTracks(session, playlist_id, WritetoFile):
 	url = f"https://api.spotify.com/v1/playlists/{playlist_id}"
 	playlist_data = makeGetRequest(session, url)
 	tracks_info = []
@@ -250,7 +250,7 @@ def getTracks(session, playlist_id, ifWritetoFile):
 		}   
 			
 		tracks_info.append(track_info)
-	if (ifWritetoFile):
+	if (WritetoFile):
 		data = sorted(tracks_info, key=lambda x: x['energy'])
 
 		# Convert the list of dictionaries to a JSON string

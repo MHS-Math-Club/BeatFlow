@@ -3,6 +3,14 @@ const genreDropdown = document.getElementById('genreDropdown');
 const genreSelect = document.getElementById('genreSelect');
 let energy = 0;
 let netAccel = 0;
+let cadence = 0;
+let min_cadence = 80;
+let max_cadence = 200;
+
+const intervalId = setInterval(() => {
+  nextSong(cadence);
+}, 5000);
+
 
 // JavaScript function
 function openPopup() {
@@ -82,6 +90,36 @@ function throttle(func, delay) {
     };
 }
 
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function nextSong(cadence) {
+    const division = Math.floor((max_cadence - min_cadence) / 5);
+    let newindex;
+
+    if (cadence < min_cadence + division) {
+        newindex = getRandomInt(0, Math.floor(playlist.length / 5) - 1);
+    } else if (cadence < min_cadence + 2 * division) {
+        newindex = getRandomInt(Math.floor(playlist.length / 5), 2 * Math.floor(playlist.length / 5) - 1);
+    } else if (cadence < min_cadence + 3 * division) {
+        newindex = getRandomInt(2 * Math.floor(playlist.length / 5), 3 * Math.floor(playlist.length / 5) - 1);
+    } else if (cadence < min_cadence + 4 * division) {
+        newindex = getRandomInt(3 * Math.floor(playlist.length / 5), 4 * Math.floor(playlist.length / 5) - 1);
+    } else {
+        newindex = getRandomInt(4 * Math.floor(playlist.length / 5), 5 * Math.floor(playlist.length / 5) - 1);
+    }
+
+    const send = document.getElementById("send");
+
+    document.getElementById("index").value = newindex;
+    document.getElementById("old-index").value = index;
+    document.getElementById("old-genre").value = genre;
+
+    send.submit();
+}
+
 function Compute() {
     DeviceMotionEvent.requestPermission().then(response => {
         if (response == 'granted') {
@@ -143,9 +181,9 @@ function Compute() {
 
             }
 
-        // Add an event listener for the initial devicemotion event
-        const throttledProcessMotionEvent = throttle(processMotionEvent, 1000);
-        window.addEventListener('devicemotion', processMotionEvent);
+            // Add an event listener for the initial devicemotion event
+            const throttledProcessMotionEvent = throttle(processMotionEvent, 1000);
+            window.addEventListener('devicemotion', processMotionEvent);
         } else {
             headingElement.textContent = "Permission not granted";
         }
