@@ -141,18 +141,19 @@ function getCadence() {
                     longAccelHist.shift();
                 }
                 energy = (cadence ** 1.5) * 0.00008 * longAccelHist.reduce(adder) / longAccelHist.length;
-                headingElementEnergy.textContent = "Energy: " + parseFloat(energy.toFixed(1));
-                if (parsed < 1) {
-                    return updateChart(parsed * 10)
-                } else {
-                    return updateChart(parsed)
-                }
-                
+
                 if(new Date.getTime() >= timeEnd || notStarted || (scoreSong(song, cadence, energy, previousSongs) < 0.4 && getNewSong(playlist, cadence, energy, previousSongs).id != song.id)){
                     song = getNewSong(playlist, cadence, energy, previousSongs);
                     timeEnd = new Date.getTime() + (song.duration * 1000)
                     document.getElementById("song").value = song.id;
                     document.getElementById("song_request").onsubmit;
+                }
+
+                headingElementEnergy.textContent = "Energy: " + parseFloat(energy.toFixed(1));
+                if (parsed < 1) {
+                    return updateChart(parsed * 10)
+                } else {
+                    return updateChart(parsed)
                 }
 
 
@@ -171,23 +172,32 @@ function getNewSong(songList, idealTempo, idealEnergy, previousSongs){
     let bestSong = songList[0];
     let bestScore = 0;
     for(i = 0; i < songList.length; i++){
-        let score = (Math.abs(adjustTempo(songList[i].tempo) - idealTempo)) + 0.3 * (Math.abs(songList[i].energy * 100 - idealEnergy));
-        if(previousSongs.includes(songList[i].id)){
-            score = 0;
-        }
+        let score = scoreSong(songList[i], idealTempo, idealEnergy, previousSongs);
         if(score > bestScore){
             bestSong = songList[i];
             bestScore = score
         }
         
     }
-    return bestSong.id;
+    return bestSong;
 }
 
 function adjustTempo(tempo, cadence){
-    let possibleTempos = [tempo / 4, tempo / 2, tempo, tempo * 2, tempo * 4]
-    possibleTempos.sort(function(a){return Math.abs(a - cadence)})
-    return possibleTempos[4]
+    let possibleTempos = [tempo / 2, tempo, tempo * 2]
     possibleTempos.sort(function(a, b){return Math.abs(a - cadence) - Math.abs(b - cadence)})
     return possibleTempos[0]
+}
+
+function scoreSong(song, idealTempo, idealEnergy, previousSongs){
+    tempoScore = 1 / Math.abs(adjustTempo(song.tempo) - idealTempo);
+    energyScore = 1 / Math.abs(song.energy * 100 - idealEnergy);
+    rhythmScore = Math.sqrt(song.danceability);
+    score = 0.4 * rhythmScore + 0.3 * tempoScore + 0.3 * energyScore;
+    if(song.time_signature % 2 > 0){
+        score *= 0.5;
+    }
+    if(previousSongs.includes(song.id)){
+        score *= 0.5;
+    }
+    return score;
 }
