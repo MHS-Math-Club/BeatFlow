@@ -63,7 +63,7 @@
                                         {{ playlist[0]['artists'] }}
                                     {% endif %}
                                 </li>
-                                <li><strong>Energy:</strong> {{ playlist[0]['energy'] * 100 | round|int }}</li>
+                                <li><strong>Energy:</strong> {{ (playlist[0]['energy'] * 100) | round|int }}</li>
                             </ul>
                         </div>
                     </div>
