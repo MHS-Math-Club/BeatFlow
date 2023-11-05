@@ -43,17 +43,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    const genreSelect = document.getElementById('genreSelect');
-    const genreDropdown = document.getElementById('genreDropdown');
-
-    genreSelect.addEventListener('change', function () {
-        const selectedGenre = genreSelect.value;
-        genreDropdown.textContent = selectedGenre;
-        genreSelect.classList.add('d-none');
-    });
-});
-
 var maxDataPoints = 200; // Adjust this number as needed
 
 // Function to update the chart
@@ -74,30 +63,56 @@ function updateChart(newValue) {
     myChart.update();
 }
 
+function calculateCadence(netAccel) {
+    /// function
+}
+
+// Function to create a cadence stream
+function createCadenceStream(netAccel) {
+  const cadenceStream = {
+    onValue: function (callback) {
+      const interval = 1000; // Interval in milliseconds
+      setInterval(() => {
+        const cadence = calculateCadence(netAccel);
+        callback(cadence);
+      }, interval);
+    },
+  };
+  return cadenceStream;
+}
+
 function Compute() {
     DeviceMotionEvent.requestPermission().then(response => {
         if (response == 'granted') {
             var headingElementAccel = document.getElementById("accel_value");
+            var headingElementCadence = document.getElementById("cadence_value");
 
             function processMotionEvent(event) {
                 var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
                 let parsed = Math.round(parseFloat(netAccel.toFixed(1)));
-                let i = 0;
                 headingElementAccel.textContent = "Acceleration: " + parsed;
 
                 if (parsed < 1) {
-                    updateChart(parsed * 10)
+                    updateChart(parsed * 10);
                 } else {
-                    updateChart(parsed)
+                    updateChart(parsed);
                 }
+
+                // Cadence calculation
+                var cadenceStream = createCadenceStream(netAccel);
+                cadenceStream.onValue(function(val) {
+                    headingElementCadence.textContent = val;
+                });
 
             }
 
             // Add an event listener for the initial devicemotion event
             window.addEventListener('devicemotion', processMotionEvent);
         } else {
-            headingElement.textContent = "Permission not granted";
+            headingElementAccel.textContent = "Permission not granted";
         }
     });
 }
+
+
 
