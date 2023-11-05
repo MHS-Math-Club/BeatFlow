@@ -60,7 +60,7 @@
                                     {% if playlist[0]['artists']|length > 1 %}
                                         {{ playlist[0]['artists']|join(', ') }}
                                     {% else %}
-                                        {{ playlist[0]['artists'] }}
+                                        {{ playlist[0]['artists'][0] }}
                                     {% endif %}
                                 </li>
                                 <li><strong>Energy:</strong> {{ (playlist[0]['energy'] * 100) | round|int }}</li>

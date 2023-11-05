@@ -47,6 +47,7 @@ def get_tracks_with_info(playlist_id):
             'artists': artist_names,
             'id': track_id,
             'album': track['album']['name'],
+            'duration': int(track['duration_ms'] / 1000),
             'tempo': dance_features['tempo'],
             'time_signature': dance_features['time_signature'],
             'energy': dance_features['energy'],
@@ -65,7 +66,7 @@ data = sorted(get_tracks_with_info("4IAndRau2rqC9men6MMDGr"), key=lambda x: x['e
 json_string = json.dumps(data, indent=4)
 
 # Write the JSON string to a file
-with open("static/data/classical.json", "w") as json_file:
+with open("static/data/classical", "w") as json_file:
     json_file.write(json_string)
 
 print("Data has been written.")
