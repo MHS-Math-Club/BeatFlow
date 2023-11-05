@@ -8,6 +8,7 @@ import string as string
 import requests
 import time
 import logging
+import json
 
 
 def createStateKey(size):
@@ -65,8 +66,19 @@ def checkTokenStatus(session):
 
 def makeGetRequest(session, url, params={}):
 	headers = {"Authorization": "Bearer {}".format(session['token'])}
-	response = requests.get(url, headers=headers, params=params)
+	response = requests.get(url, headers=headers, params=params)	
 
+	if response.status_code == 429:
+		if 'Retry-After' in response.headers:
+			retry_after = int(response.headers['Retry-After'])
+			print(f"Received 429 status code. Waiting for {retry_after} seconds...")
+			time.sleep(retry_after)
+			# Retry the request
+			return makeGetRequest(session, url, params)
+		else:
+			# Retry immediately without a specified wait time
+			print("Received 429 status code without a Retry-After header. Retrying immediately...")
+			return makeGetRequest(session, url, params)
 	# 200 code indicates request was successful
 	if response.status_code == 200:
 		return response.json()
@@ -205,37 +217,46 @@ def getAudioFeatures(session, track_id):
 	payload = makeGetRequest(session, url)
 	return payload
 
-def getTracks(session, playlist_id):
-    url = f"https://open.spotify.com/playlist/{playlist_id}"
-    playlist_data = makeGetRequest(session, url)
-    tracks_info = []
+def getTracks(session, playlist_id, ifWritetoFile):
+	url = f"https://api.spotify.com/v1/playlists/{playlist_id}"
+	playlist_data = makeGetRequest(session, url)
+	tracks_info = []
 
-    for item in playlist_data['items']:
-        track_id = item['track']['id']
+	for item in playlist_data['tracks']['items']:
+		track_id = item['track']['id']
 
-        endpoint = f"https://api.spotify.com/v1/audio-features/{track_id}"
-        audio_features = makeGetRequest(session, endpoint)
+		endpoint = f"https://api.spotify.com/v1/audio-features/{track_id}"
+		audio_features = makeGetRequest(session, endpoint)
 
-        track_url = f"https://api.spotify.com/v1/me/player/play/{track_id}"
-        track = makeGetRequest(session, track_url)
+		track_url = f"https://api.spotify.com/v1/tracks/{track_id}"
+		track = makeGetRequest(session, track_url)
 
-        artist_names = [artist['name'] for artist in track['artists']]
+		artist_names = [artist['name'] for artist in track['artists']]
 
-        
-        track_info = {
-            'name': track['name'],
-            'artists': artist_names,
-            'id': track_id,
-            'album': track['album']['name'],
-            'duration': int(track['duration_ms'] / 1000),
-            'image': track['album']['images'][0]['url'],
-            'tempo': audio_features['tempo'],
-            'time_signature': audio_features['time_signature'],
-            'energy': audio_features['energy'],
-            'happiness': audio_features['valence'],
-            'loudness': audio_features['loudness'],
-            'danceability': audio_features['danceability']
-        }   
-            
-        tracks_info.append(track_info)
-    return tracks_info
+		
+		track_info = {
+			'name': track['name'],
+			'artists': artist_names,
+			'id': track_id,
+			'album': track['album']['name'],
+			'duration': track['duration_ms'],
+			'image': track['album']['images'][0]['url'],
+			'tempo': audio_features['tempo'],
+			'time_signature': audio_features['time_signature'],
+			'energy': audio_features['energy'],
+			'happiness': audio_features['valence'],
+			'loudness': audio_features['loudness'],
+			'danceability': audio_features['danceability']
+		}   
+			
+		tracks_info.append(track_info)
+	if (ifWritetoFile):
+		data = sorted(tracks_info, key=lambda x: x['energy'])
+
+		# Convert the list of dictionaries to a JSON string
+		json_string = json.dumps(data, indent=4)
+
+		# Write the JSON string to a file
+		with open(f"static/data/{playlist_id}.json", "w") as json_file:
+			json_file.write(json_string)
+	return tracks_info
