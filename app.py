@@ -17,18 +17,20 @@ def index():
 
         genre = 'classical'
         playlist = []
+        index = 0
 
         if request.method == "POST":
             genre = request.form.get('genre')
+            # find index of song
 
         file_path = f'static/data/{genre}.json'
 
         with open(file_path, 'r') as json_file:
             playlist = json.load(json_file)
 
-        playTrack(session, playlist[0]['id'], device_id)
+        playTrack(session, playlist[index]['id'], device_id)
             
-        return render_template("index.html", playlist=playlist, genre=genre)
+        return render_template("index.html", playlist=playlist, genre=genre, index=index)
     else:
         return redirect(url_for('auth'))
 
