@@ -4,31 +4,33 @@ const genreSelect = document.getElementById('genreSelect');
 let energy = 0;
 let netAccel = 0;
 
-// JavaScript function
+// Function to open the popup
 function openPopup() {
     var popup = document.getElementById("popup");
     popup.style.display = "flex";
 }
 
+// Function to close the popup
 function closePopup() {
     var popup = document.getElementById("popup");
     popup.style.display = "none";
     // Store a flag in localStorage to indicate that the popup has been closed
-   localStorage.setItem('popupClosed', 'true');
+    localStorage.setItem('popupClosed', 'true');
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     var form = document.getElementById("genre-form");
-    
-    form.addEventListener("change", function() {
+
+    form.addEventListener("change", function () {
+        // Submit the form when any form element changes
         form.submit();
     });
 });
 
-window.onload = function() {
+window.onload = function () {
     var popupClosed = localStorage.getItem('popupClosed');
     if (!popupClosed) {
-    openPopup();
+        openPopup();
     }
 }
 
@@ -41,11 +43,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const genreSelect = document.getElementById('genreSelect');
     const genreDropdown = document.getElementById('genreDropdown');
 
-    genreSelect.addEventListener('change', function() {
+    genreSelect.addEventListener('change', function () {
         const selectedGenre = genreSelect.value;
         genreDropdown.textContent = selectedGenre;
         genreSelect.classList.add('d-none');
@@ -53,6 +55,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 var maxDataPoints = 200; // Adjust this number as needed
+
+// Function to update the chart
 function updateChart(newValue) {
     // Add a new data point to the chart
     myChart.data.datasets[0].data.push(newValue);
@@ -70,74 +74,29 @@ function updateChart(newValue) {
     myChart.update();
 }
 
-function getCadence() {
+function Compute() {
     DeviceMotionEvent.requestPermission().then(response => {
         if (response == 'granted') {
-            let accelHist = [];
-            let avgHist = [0];
-            let timeHist = [0];
-            let longAccelHist = [];
-            let cadence = 0;
+            var headingElementAccel = document.getElementById("accel_value");
 
             function processMotionEvent(event) {
                 var netAccel = Math.sqrt(event.acceleration.x ** 2 + event.acceleration.y ** 2 + event.acceleration.z ** 2);
+                let parsed = Math.round(parseFloat(netAccel.toFixed(1)));
+                let i = 0;
+                headingElementAccel.textContent = "Acceleration: " + parsed;
 
-                // Acceleration smoothing
-                if (accelHist.length > 20) {
-                    avgAccel = accelHist.reduce(adder) / accelHist.length;
-                    accelHist.shift();
-
-                    if (avgHist.length > 20) {
-                        avgHist.shift();
-                    }
-                    avgHist.push(avgAccel);
-
-                    // Peak detection
-                    if ((avgHist[0] + 0.3 < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length - 1] + 0.3 < avgHist[Math.floor(avgHist.length / 2)])) {
-
-                        pTime = new Date().getTime();
-                        if (pTime - timeHist[timeHist.length - 1] > 300) {
-
-                            longAccelHist.push(netAccel);
-                            console.log('Peak detected at average acceleration: ' + avgHist[Math.floor(avgHist.length / 2)]);
-
-                            // Log times
-                            if (timeHist.length > 20) {
-                                timeHist.shift();
-                            }
-
-                            timeHist.push(pTime);
-                            let tdiffHist = [0];
-                            for (let i = 1; i < timeHist.length; i++) {
-                                tdiffHist[i] = timeHist[i] - timeHist[i - 1];
-                            }
-
-                            // Calculate cadence
-                            avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
-                            cadence = 60000 / avgDiff;
-                            // Update your UI with cadence value
-                            updateCadenceUI(cadence);
-                        }
-                    }
+                if (parsed < 1) {
+                    updateChart(parsed * 10)
+                } else {
+                    updateChart(parsed)
                 }
 
-                accelHist.push(netAccel);
-
-                // For averages
-                function adder(total, value) {
-                    return total + value;
-                }
             }
+
+            // Add an event listener for the initial devicemotion event
+            window.addEventListener('devicemotion', processMotionEvent);
+        } else {
+            headingElement.textContent = "Permission not granted";
         }
-    }
-
-    function updateCadenceUI(cadence) {
-        // Update your UI with the cadence value
-        var headingElementCadence = document.getElementById("cadence_value");
-        headingElementCadence.textContent = "Cadence: " + parseFloat(cadence.toFixed(1));
-    }
+    });
 }
-
-
-
-

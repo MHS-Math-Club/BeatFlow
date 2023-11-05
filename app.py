@@ -3,6 +3,7 @@ import json
 from flask import Flask, render_template, request, redirect, session, make_response, url_for
 from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack, getTracks
 import time
+import random
 from main import app
 from pyngrok import ngrok
 
@@ -17,7 +18,7 @@ def index():
 
         genre = 'classical'
         playlist = []
-        index = 0
+        index = random.randint(1, 10)
 
         if request.method == "POST":
             genre = request.form.get('genre')
