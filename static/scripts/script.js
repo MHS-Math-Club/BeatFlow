@@ -3,6 +3,11 @@ const genreDropdown = document.getElementById('genreDropdown');
 const genreSelect = document.getElementById('genreSelect');
 let energy = 0;
 let netAccel = 0;
+let accelHist = []
+let avgHist = [0, 0, 0]
+let timeHist = []
+let longAccelHist = [1, 1]
+let cadence = 0
 
 // Function to open the popup
 function openPopup() {
@@ -65,6 +70,40 @@ function updateChart(newValue) {
 
 function calculateCadence(netAccel) {
     /// function
+    if (accelHist.length > 50) {
+        avgAccel = accelHist.reduce(adder) / accelHist.length;
+        accelHist.shift()
+        
+        if (avgHist.length > 20) {
+            avgHist.shift();
+        }
+    avgHist.push(avgAccel)
+    }
+    if((avgHist[0] + 0.3 < avgHist[Math.floor(avgHist.length / 2)] && avgHist[avgHist.length - 1] + 0.3 < avgHist[Math.floor(avgHist.length / 2)]) ){
+
+        pTime = new Date().getTime();
+        if(pTime - timeHist[timeHist.length] > 250){
+
+            longAccelHist.push(netAccel)
+            console.log('Peak detected at average acceleration: ' + avgHist[Math.floor(avgHist.length / 2)])
+            //log times
+            if (timeHist.length > 20){
+                timeHist.shift();
+            }
+
+            timeHist.push(pTime);
+            let tdiffHist = [0];
+            for(i = 1; i < timeHist.length; i++){
+                tdiffHist[i] = timeHist[i] - timeHist[i - 1];
+            }
+
+            avgDiff = tdiffHist.reduce(adder) / tdiffHist.length;
+
+            cadence = 60000 / avgDiff;
+            
+        }
+    }
+    return cadence;
 }
 
 // Function to create a cadence stream
