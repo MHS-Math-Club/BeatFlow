@@ -4,8 +4,11 @@ from flask import Flask, render_template, request, redirect, session, make_respo
 from functions import createStateKey, getToken, refreshToken, checkTokenStatus, getUserInformation, getUserDevices, startPlayback, makePostRequest, playTrack, getImage
 import time
 from main import app
+from pyngrok import ngrok
 
 app.secret_key = "something"
+ngrok.set_auth_token('2Xjeq4GP6viuzqaDO9XrIeg31LX_53i3r6zsfhwkvpy9nMt1K')
+public_url = "https://f9da-129-130-19-169.ngrok-free.app    "
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -51,7 +54,7 @@ def callback():
     code = request.args['code']
     session.pop('state_key', None)
 
-    payload = getToken(code, app)
+    payload = getToken(code)
 
     if payload != None:
         session['token'] = payload[0]
@@ -62,5 +65,8 @@ def callback():
     session['user_id'] = current_user['id']
 
     return redirect(url_for('index')) 
+
+if __name__ == '__main__':
+    app.run(port=5003, debug=True)
 
 
